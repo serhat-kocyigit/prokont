@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PROKONT | Detaylı Tadilat Planlayıcı</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --bg: #f5f8f6;
+      --card: #ffffff;
+      --border: #e2eae5;
+      --text: #102b3a;
+      --muted: #71817c;
+      --green: #21805d;
+      --orange: #e86a33;
+    }
+    body { background: var(--bg); }
+    .planner-header { background: var(--text); color: #fff; padding: 40px 0 60px; text-align: center; }
+    .planner-header h1 { font: 800 36px var(--serif); margin: 10px 0; }
+    .planner-header p { color: #a4b3ae; font-size: 16px; max-width: 600px; margin: 0 auto; line-height: 1.5; }
+    
+    .planner-container { display: grid; grid-template-columns: 1fr 340px; gap: 30px; align-items: start; margin-top: -30px; padding-bottom: 60px; }
+    @media(max-width:950px){ .planner-container { grid-template-columns: 1fr; } }
+    
+    .p-card { background: var(--card); border-radius: 8px; box-shadow: 0 10px 30px rgba(16,43,58,0.06); padding: 30px; margin-bottom: 20px; }
+    .p-card-title { font: 800 20px var(--serif); color: var(--text); border-bottom: 2px solid var(--border); padding-bottom: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+    
+    .scope-selector { display: flex; gap: 12px; margin-bottom: 24px; }
+    .scope-btn { flex: 1; padding: 14px; text-align: center; border: 2px solid var(--border); border-radius: 6px; background: #fff; font: 700 15px var(--sans); color: var(--muted); cursor: pointer; transition: .2s; }
+    .scope-btn.active { border-color: var(--green); background: #f2f7f4; color: var(--green); }
+    
+    .master-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; }
+    .field { display: none; } /* Hidden by default, toggled by JS */
+    .field.active { display: block; }
+    .field label { display: block; font: 700 12px var(--sans); color: var(--muted); margin-bottom: 6px; letter-spacing: 0.03em; }
+    .field input, .field select { width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 10px 14px; font: 600 15px var(--sans); color: var(--text); background: #fafcfb; transition: .2s; }
+    .field input:focus, .field select:focus { border-color: var(--green); outline: none; background: #fff; }
+    
+    .category-section { margin-bottom: 40px; display: none; }
+    .category-section.active { display: block; }
+    .category-section h3 { font: 800 16px var(--sans); color: var(--green); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 10px; }
+    .category-section h3::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    
+    .line-item { display: none; grid-template-columns: 1fr 140px 120px; gap: 16px; align-items: center; padding: 12px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 8px; transition: .2s; }
+    .line-item.active { display: grid; }
+    .line-item:hover { border-color: #cbd8cf; background: #fdfefe; }
+    .line-name { display: flex; flex-direction: column; }
+    .line-name b { font: 700 14px var(--sans); color: var(--text); }
+    .line-name small { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    
+    .line-qty { display: flex; align-items: center; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: #fff; }
+    .line-qty input { width: 100%; border: none; padding: 8px 10px; text-align: center; font: 700 14px var(--sans); color: var(--text); outline: none; }
+    .line-qty span { padding: 8px 12px; background: #f0f4f2; color: var(--muted); font: 700 11px var(--sans); border-left: 1px solid var(--border); }
+    
+    .line-total { text-align: right; font: 800 15px var(--sans); color: var(--text); }
+    
+    @media(max-width:600px){
+      .line-item.active { display: grid; grid-template-columns: 1fr 100px; }
+      .line-total { grid-column: 1 / -1; text-align: left; padding-top: 8px; border-top: 1px dashed var(--border); }
+      .scope-selector { flex-direction: column; }
+    }
+    
+    .sticky-sidebar { position: sticky; top: 20px; }
+    .summary-box { background: var(--text); color: #fff; }
+    .summary-box .p-card-title { color: #fff; border-color: rgba(255,255,255,0.1); }
+    .sum-row { display: flex; justify-content: space-between; font-size: 13px; color: #a4b3ae; margin-bottom: 12px; }
+    .sum-row b { color: #fff; font-weight: 600; }
+    .sum-grand { margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .sum-grand small { display: block; font-size: 11px; letter-spacing: 0.1em; color: var(--green); margin-bottom: 4px; font-weight: 700; }
+    .sum-grand strong { font: 800 32px var(--sans); color: #fff; }
+    .btn-block { width: 100%; display: block; text-align: center; padding: 14px; background: var(--orange); color: #fff; font: 700 15px var(--sans); border-radius: 4px; text-decoration: none; margin-top: 24px; transition: .2s; border: none; cursor: pointer; }
+    .btn-block:hover { background: #d05c28; }
+  </style>
+</head>
+<body>
+
+<header id="top">
+  <div class="shell nav">
+    <a class="brand" href="index.html">
+      <img src="prokont-logo.png" alt="PROKONT">
+      <span>PROKONT<small>MÜHENDİSLİK & İNŞAAT</small></span>
+    </a>
+    <nav>
+      <a href="index.html">Ana Sayfa</a>
+      <a href="hesaplama-araclari.html">Hesaplama Merkezi</a>
+      <a href="poz-listesi.html">Poz Listesi</a>
+      <a href="planlayici.html" class="active">Planlayıcı</a>
+      <a href="karsilastir.html">Karşılaştır</a>
+      <a href="projeler.html">Projelerimiz</a>
+    </nav>
+    <div class="actions">
+      <button id="searchToggle" aria-label="Arama">⌕</button>
+      <a class="btn orange" href="index.html#offer">Teklif Al →</a>
+      <button id="menu" aria-label="Menü">☰</button>
+    </div>
+  </div>
+  <div id="mobileNav">
+    <div class="mnav-links">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="hesaplama-araclari.html">Hesaplama Merkezi</a>
+      <a href="poz-listesi.html">Poz Listesi</a>
+      <a href="planlayici.html">Planlayıcı</a>
+      <a href="karsilastir.html">Karşılaştır</a>
+      <a href="projeler.html">Projelerimiz</a>
+    </div>
+    <div class="mnav-info">
+      <div class="mnav-card">
+        <div class="mnav-card-header">
+          <img src="prokont-logo.png" alt="PROKONT" class="mnav-logo">
+          <div>
+            <strong>PROKONT Mühendislik</strong>
+            <span>İnşaat & Taahhüt</span>
+          </div>
+        </div>
+        <div class="mnav-location">
+          <a href="https://maps.app.goo.gl/gHApgxnrrzLfrx4T9" target="_blank" rel="noopener noreferrer" class="mnav-map-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Anbar, Organize Cd.<br>38070 Melikgazi / Kayseri</span>
+          </a>
+        </div>
+        <div class="mnav-contacts">
+          <a href="tel:03522314499" class="mnav-contact">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            0352 231 44 99
+          </a>
+          <a href="https://wa.me/905436192262" target="_blank" class="mnav-contact mnav-whatsapp">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.612.616l4.532-1.47A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.24 0-4.308-.724-5.993-1.953l-.42-.306-2.693.874.894-2.657-.335-.437A9.96 9.96 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+            0543 619 22 62
+          </a>
+          <a href="mailto:info@prokontinsaat.com" class="mnav-contact">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            info@prokontinsaat.com
+          </a>
+        </div>
+        <a href="index.html#offer" class="mnav-cta">Teklif Al →</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="planner-header">
+  <div class="shell">
+    <h1>Detaylı Metraj ve Bütçe Planlayıcı</h1>
+    <p>Projenizin kapsamını seçin, ana ölçüleri girin ve sistem standart tüm metrajları sizin için oluştursun. Ardından her bir kalemi projenize göre özelleştirin.</p>
+  </div>
+</div>
+
+<div class="shell planner-container">
+  
+  <div class="main-content">
+    
+    <div class="p-card">
+      <div class="scope-selector">
+        <button class="scope-btn active" data-scope="daire">Komple Daire</button>
+        <button class="scope-btn" data-scope="banyo">Sadece Banyo</button>
+        <button class="scope-btn" data-scope="mutfak">Sadece Mutfak</button>
+      </div>
+
+      <div class="p-card-title">Proje Ana Parametreleri <small style="font-size:12px;color:var(--muted);font-weight:600;">(Otomatik Doldurucu)</small></div>
+      <div class="master-inputs">
+        <!-- Komple Daire Inputs -->
+        <div class="field scope-daire">
+          <label>Daire Net Alanı (m²)</label>
+          <input type="number" id="m_alan" value="100" min="10">
+        </div>
+        <div class="field scope-daire scope-banyo scope-mutfak">
+          <label>Tavan Yüksekliği (m)</label>
+          <input type="number" id="m_tavan" value="2.8" step="0.1" min="2">
+        </div>
+        <div class="field scope-daire">
+          <label>Oda Sayısı</label>
+          <select id="m_oda">
+            <option value="1">1+0 / Stüdyo</option>
+            <option value="2">1+1</option>
+            <option value="3">2+1</option>
+            <option value="4" selected>3+1</option>
+            <option value="5">4+1</option>
+            <option value="6">Villa / Dubleks</option>
+          </select>
+        </div>
+        <div class="field scope-daire">
+          <label>Banyo/WC Sayısı</label>
+          <input type="number" id="m_banyo" value="1" min="0">
+        </div>
+
+        <!-- Banyo Inputs -->
+        <div class="field scope-banyo">
+          <label>Banyo Alanı (m²)</label>
+          <input type="number" id="m_banyo_alan" value="6" min="2">
+        </div>
+
+        <!-- Mutfak Inputs -->
+        <div class="field scope-mutfak">
+          <label>Mutfak Alanı (m²)</label>
+          <input type="number" id="m_mutfak_alan" value="12" min="4">
+        </div>
+        <div class="field scope-mutfak">
+          <label>Mutfak Dolabı (mtül)</label>
+          <input type="number" id="m_mutfak_mtul" value="5" min="1">
+        </div>
+      </div>
+    </div>
+
+    <div class="p-card" id="lineItemsContainer">
+      <!-- JavaScript will populate categories and items here -->
+    </div>
+    
+  </div>
+  
+  <aside class="sticky-sidebar">
+    <div class="p-card summary-box">
+      <div class="p-card-title">Maliyet Özeti</div>
+      
+      <div class="sum-row"><span>Kullanılacak Malzeme</span><b id="sum_mat">0 TL</b></div>
+      <div class="sum-row"><span>Uygulama İşçiliği</span><b id="sum_lab">0 TL</b></div>
+      <div class="sum-row"><span>Kırım & Nakliye</span><b id="sum_oth">0 TL</b></div>
+      
+      <div class="sum-grand">
+        <small>YAKLAŞIK TOPLAM BÜTÇE (KDV HARİÇ)</small>
+        <strong id="sum_total">0 TL</strong>
+      </div>
+      
+      <label style="display:flex; align-items:center; gap:8px; margin-top:20px; font-size:12px; color:#a4b3ae; cursor:pointer;">
+        <input type="checkbox" id="include_vat" checked style="accent-color:var(--green); width:16px; height:16px;">
+        Fiyatlara %20 KDV dahil et
+      </label>
+      
+      <button class="btn-block" id="btn_offer">PROKONT'a Teklif Gönder →</button>
+      <button class="btn-block" id="btn_print" style="background:transparent; border:1px solid rgba(255,255,255,0.2); margin-top:12px;">PDF Olarak İndir</button>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+const money = n => new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 0 }).format(Math.round(n)) + ' TL';
+const el = id => document.getElementById(id);
+let activeScope = 'daire';
+
+const db = [
+  { cat: 'Yıkım ve Hafriyat', id: 'c_kirim', name: 'Zemin/Duvar Kırım Söküm', unit: 'm²', mat: 0, lab: 0, oth: 85, desc: 'Eski seramik, parke ve duvar kırım işleri', scopes: ['daire', 'banyo', 'mutfak'] },
+  { cat: 'Yıkım ve Hafriyat', id: 'c_moloz', name: 'Moloz Atımı ve Nakliye', unit: 'sefer', mat: 0, lab: 0, oth: 4500, desc: 'Çuvallama ve hafriyat döküm sahasına nakliye', scopes: ['daire', 'banyo', 'mutfak'] },
+  
+  { cat: 'Duvar, Alçı ve Boya', id: 'c_duvar', name: 'Tuğla / Gazbeton Duvar', unit: 'm²', mat: 220, lab: 250, oth: 0, desc: 'Yeni duvar örümü ve harç', scopes: ['daire'] },
+  { cat: 'Duvar, Alçı ve Boya', id: 'c_alci', name: 'Kaba Sıva ve Saten Alçı', unit: 'm²', mat: 165, lab: 260, oth: 0, desc: 'Fileli sıva, köşebent ve saten çekilmesi', scopes: ['daire', 'mutfak'] },
+  { cat: 'Duvar, Alçı ve Boya', id: 'c_boya', name: 'İç Cephe Boya', unit: 'm²', mat: 95, lab: 145, oth: 0, desc: 'Astar ve 2 kat silinebilir silikonlu boya', scopes: ['daire', 'mutfak'] },
+  { cat: 'Duvar, Alçı ve Boya', id: 'c_asmatavan', name: 'Alçıpan Asma Tavan', unit: 'm²', mat: 320, lab: 380, oth: 0, desc: 'Profil konstrüksiyon ve alçıpan kaplama', scopes: ['daire', 'banyo'] },
+  
+  { cat: 'Zemin Kaplamaları', id: 'c_sap', name: 'Zemin Tesviye Şapı', unit: 'm²', mat: 120, lab: 180, oth: 0, desc: 'Parke ve seramik altı akıllı/klasik şap', scopes: ['daire'] },
+  { cat: 'Zemin Kaplamaları', id: 'c_parke', name: 'Laminat Parke', unit: 'm²', mat: 480, lab: 180, oth: 0, desc: 'AC4 8mm derzli parke ve şilte', scopes: ['daire'] },
+  { cat: 'Zemin Kaplamaları', id: 'c_supurgelik', name: 'MDF Süpürgelik', unit: 'mtül', mat: 110, lab: 65, oth: 0, desc: '8-10 cm lake görünümlü süpürgelik', scopes: ['daire'] },
+  
+  { cat: 'Islak Hacimler (Seramik & İzolasyon)', id: 'c_izo', name: 'Sürme Su İzolasyonu', unit: 'm²', mat: 280, lab: 150, oth: 0, desc: 'Banyo zemin ve duşakabin içi çift kat izolasyon', scopes: ['daire', 'banyo'] },
+  { cat: 'Islak Hacimler (Seramik & İzolasyon)', id: 'c_seramik', name: 'Seramik ve Fayans', unit: 'm²', mat: 850, lab: 450, oth: 0, desc: 'Zemin/duvar granit veya seramik', scopes: ['daire', 'banyo', 'mutfak'] },
+  
+  { cat: 'Ahşap ve Mobilya', id: 'c_ickapi', name: 'İç Kapı (Panel/Lake)', unit: 'adet', mat: 6500, lab: 1200, oth: 0, desc: 'Kasa, pervaz, kanat ve kilit montajı', scopes: ['daire', 'banyo'] },
+  { cat: 'Ahşap ve Mobilya', id: 'c_celikkapi', name: 'Çelik Kapı', unit: 'adet', mat: 18000, lab: 2500, oth: 0, desc: 'Yüksek güvenlikli dış çelik kapı', scopes: ['daire'] },
+  { cat: 'Ahşap ve Mobilya', id: 'c_mutfak', name: 'Mutfak Dolabı (MDF/Lake)', unit: 'mtül', mat: 8500, lab: 2200, oth: 0, desc: 'Alt+üst modül gövde, kapak ve menteşeler', scopes: ['daire', 'mutfak'] },
+  { cat: 'Ahşap ve Mobilya', id: 'c_tezgah', name: 'Mutfak Tezgahı (Kuvars)', unit: 'mtül', mat: 5500, lab: 1500, oth: 0, desc: 'Çimstone/Belenco tarzı kuvars tezgah', scopes: ['daire', 'mutfak'] },
+  
+  { cat: 'Mekanik ve Tesisat', id: 'c_tesisat_boru', name: 'Temiz/Pis Su Hattı', unit: 'götürü', mat: 4500, lab: 8500, oth: 0, desc: 'Boru ve altyapı tesisat yenilemesi', scopes: ['daire', 'banyo', 'mutfak'] },
+  { cat: 'Mekanik ve Tesisat', id: 'c_vitrifiye', name: 'Klozet ve Lavabo Takımı', unit: 'takım', mat: 12500, lab: 2500, oth: 0, desc: 'Gömme rezervuar, asma klozet, lavabo', scopes: ['daire', 'banyo'] },
+  { cat: 'Mekanik ve Tesisat', id: 'c_batarya', name: 'Batarya ve Musluklar', unit: 'adet', mat: 2800, lab: 450, oth: 0, desc: 'Lavabo, banyo ve evye bataryaları', scopes: ['daire', 'banyo', 'mutfak'] },
+  { cat: 'Mekanik ve Tesisat', id: 'c_dus', name: 'Duşakabin ve Tekne', unit: 'adet', mat: 8500, lab: 1200, oth: 0, desc: 'Temperli cam duşakabin sistemi', scopes: ['daire', 'banyo'] },
+  
+  { cat: 'Elektrik ve Zayıf Akım', id: 'c_kablo', name: 'Elektrik Altyapı Hattı', unit: 'götürü', mat: 9500, lab: 18000, oth: 0, desc: 'Tüm priz, aydınlatma linyelerinin çekimi', scopes: ['daire', 'banyo', 'mutfak'] },
+  { cat: 'Elektrik ve Zayıf Akım', id: 'c_sigorta', name: 'Sigorta Kutusu ve Şalt', unit: 'takım', mat: 6500, lab: 2500, oth: 0, desc: 'Kaçak akım, otomatlar ve bağlantıları', scopes: ['daire'] },
+  { cat: 'Elektrik ve Zayıf Akım', id: 'c_priz', name: 'Anahtar ve Prizler', unit: 'adet', mat: 180, lab: 65, oth: 0, desc: 'Mekanizma, düğme ve çerçeve montajı', scopes: ['daire', 'banyo', 'mutfak'] },
+];
+
+let grouped = {};
+db.forEach(item => {
+  if(!grouped[item.cat]) grouped[item.cat] = [];
+  grouped[item.cat].push(item);
+});
+
+function renderItems() {
+  const container = el('lineItemsContainer');
+  let html = '';
+  for(let cat in grouped) {
+    html += `<div class="category-section" id="cat_${cat.replace(/\s+/g,'_')}"><h3>${cat}</h3>`;
+    grouped[cat].forEach(item => {
+      const scopeClasses = item.scopes.map(s => `s-${s}`).join(' ');
+      html += `
+        <div class="line-item ${scopeClasses}" id="wrap_${item.id}">
+          <div class="line-name">
+            <b>${item.name}</b>
+            <small>${item.desc} — B.Fiyat: ${money(item.mat + item.lab + item.oth)}/${item.unit}</small>
+          </div>
+          <div class="line-qty">
+            <input type="number" id="${item.id}" value="0" min="0" step="any" class="qty-input">
+            <span>${item.unit}</span>
+          </div>
+          <div class="line-total" id="tot_${item.id}">0 TL</div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  }
+  container.innerHTML = html;
+  
+  document.querySelectorAll('.qty-input').forEach(ipt => {
+    ipt.addEventListener('input', calculateBudget);
+  });
+}
+
+function updateScopeVisibility() {
+  // Update buttons
+  document.querySelectorAll('.scope-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.scope === activeScope);
+  });
+  
+  // Update inputs visibility
+  document.querySelectorAll('.field').forEach(f => f.classList.remove('active'));
+  document.querySelectorAll('.scope-' + activeScope).forEach(f => f.classList.add('active'));
+  
+  // Update line items visibility
+  document.querySelectorAll('.line-item').forEach(l => l.classList.remove('active'));
+  document.querySelectorAll('.s-' + activeScope).forEach(l => l.classList.add('active'));
+  
+  // Hide empty categories
+  document.querySelectorAll('.category-section').forEach(cat => {
+    const hasVisible = Array.from(cat.querySelectorAll('.line-item')).some(l => l.classList.contains('active'));
+    cat.classList.toggle('active', hasVisible);
+  });
+  
+  autoCalculateFields();
+}
+
+function autoCalculateFields() {
+  // Zero out all first
+  db.forEach(item => el(item.id).value = 0);
+  
+  const setVal = (id, val) => {
+    const ipt = el(id);
+    if(ipt && el('wrap_'+id).classList.contains('active')) {
+      ipt.value = Math.max(0, val).toFixed(1).replace('.0', '');
+    }
+  };
+  
+  const tavan = +el('m_tavan').value || 2.8;
+
+  if (activeScope === 'daire') {
+    const alan = +el('m_alan').value || 0;
+    const oda = +el('m_oda').value || 0;
+    const banyo = +el('m_banyo').value || 0;
+    
+    const banyoAlani = banyo * 6; 
+    const mutfakAlani = 12; 
+    const islakZemin = banyoAlani + mutfakAlani;
+    const kuruZemin = Math.max(0, alan - islakZemin);
+    
+    const duvarAlani = Math.sqrt(alan) * 4 * tavan;
+    const boyaAlani = duvarAlani + alan;
+    
+    setVal('c_kirim', islakZemin * 2 + islakZemin); 
+    setVal('c_moloz', Math.max(1, Math.ceil(alan / 30)));
+    setVal('c_alci', boyaAlani);
+    setVal('c_boya', boyaAlani);
+    
+    setVal('c_sap', kuruZemin);
+    setVal('c_parke', kuruZemin);
+    setVal('c_supurgelik', Math.sqrt(kuruZemin) * 4);
+    
+    setVal('c_izo', banyoAlani);
+    setVal('c_seramik', (Math.sqrt(banyoAlani||0)*4*tavan*banyo) + islakZemin);
+    
+    setVal('c_ickapi', oda + banyo);
+    setVal('c_celikkapi', 1);
+    setVal('c_mutfak', 5);
+    setVal('c_tezgah', 5);
+    
+    setVal('c_tesisat_boru', banyo + 1); 
+    setVal('c_vitrifiye', banyo);
+    setVal('c_batarya', banyo * 2 + 1); 
+    setVal('c_dus', banyo);
+    
+    setVal('c_kablo', 1);
+    setVal('c_sigorta', 1);
+    setVal('c_priz', Math.ceil(alan * 0.4)); 
+
+  } else if (activeScope === 'banyo') {
+    const ba = +el('m_banyo_alan').value || 6;
+    
+    setVal('c_kirim', ba + (Math.sqrt(ba)*4*tavan)); // Zemin + Duvar
+    setVal('c_moloz', 1);
+    
+    setVal('c_asmatavan', ba);
+    setVal('c_izo', ba);
+    setVal('c_seramik', ba + (Math.sqrt(ba)*4*tavan));
+    setVal('c_ickapi', 1);
+    
+    setVal('c_tesisat_boru', 0.5); // Götürü olarak banyo payı
+    setVal('c_vitrifiye', 1);
+    setVal('c_batarya', 2); // lavabo + duş
+    setVal('c_dus', 1);
+    setVal('c_kablo', 0.3); // Götürü pay
+    setVal('c_priz', 3);
+    
+  } else if (activeScope === 'mutfak') {
+    const ma = +el('m_mutfak_alan').value || 12;
+    const mt = +el('m_mutfak_mtul').value || 5;
+    
+    setVal('c_kirim', ma + (mt*0.6)); // Zemin + Tezgah arası
+    setVal('c_moloz', 1);
+    
+    const mutfakDuvar = Math.sqrt(ma) * 4 * tavan;
+    setVal('c_alci', mutfakDuvar);
+    setVal('c_boya', mutfakDuvar);
+    
+    setVal('c_seramik', ma + (mt*0.6)); // Zemin + Tezgah arası (60cm)
+    
+    setVal('c_mutfak', mt);
+    setVal('c_tezgah', mt);
+    
+    setVal('c_tesisat_boru', 0.5);
+    setVal('c_batarya', 1);
+    
+    setVal('c_kablo', 0.3);
+    setVal('c_priz', 6); // Tezgah üstü cihaz prizleri vb.
+  }
+  
+  calculateBudget();
+}
+
+function calculateBudget() {
+  let totMat = 0, totLab = 0, totOth = 0;
+  const vatRate = el('include_vat').checked ? 1.20 : 1;
+  
+  db.forEach(item => {
+    // Sadece o anki scope için aktif olanları hesapla
+    if (!el('wrap_'+item.id).classList.contains('active')) return;
+    
+    const qty = +(el(item.id)?.value) || 0;
+    const mat = qty * item.mat;
+    const lab = qty * item.lab;
+    const oth = qty * item.oth;
+    const totalRow = (mat + lab + oth) * vatRate;
+    
+    totMat += mat;
+    totLab += lab;
+    totOth += oth;
+    
+    const rowEl = el(`tot_${item.id}`);
+    if(rowEl) {
+      if(qty > 0) {
+        rowEl.textContent = money(totalRow);
+        rowEl.style.color = 'var(--green)';
+      } else {
+        rowEl.textContent = '0 TL';
+        rowEl.style.color = 'var(--muted)';
+      }
+    }
+  });
+  
+  el('sum_mat').textContent = money(totMat * vatRate);
+  el('sum_lab').textContent = money(totLab * vatRate);
+  el('sum_oth').textContent = money(totOth * vatRate);
+  
+  el('sum_total').textContent = money((totMat + totLab + totOth) * vatRate);
+}
+
+// Initial Setup
+renderItems();
+updateScopeVisibility();
+
+// Event Listeners
+document.querySelectorAll('.scope-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    activeScope = e.target.dataset.scope;
+    updateScopeVisibility();
+  });
+});
+
+document.querySelectorAll('.master-inputs input, .master-inputs select').forEach(ipt => {
+  ipt.addEventListener('input', autoCalculateFields);
+});
+
+el('include_vat').addEventListener('change', calculateBudget);
+el('btn_print').onclick = () => window.print();
+
+</script>
+<script>
+  (function(){
+    const menuBtn = document.getElementById('menu');
+    const mobileNav = document.getElementById('mobileNav');
+    if(menuBtn && mobileNav) {
+      menuBtn.onclick = () => {
+        const isOpen = mobileNav.classList.toggle('open');
+        menuBtn.textContent = isOpen ? '✕' : '☰';
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+      };
+      mobileNav.querySelectorAll('.mnav-links a, .mnav-cta').forEach(a => a.onclick = () => {
+        mobileNav.classList.remove('open');
+        menuBtn.textContent = '☰';
+        document.body.style.overflow = '';
+      });
+      mobileNav.addEventListener('click', (e) => {
+        if(e.target === mobileNav) {
+          mobileNav.classList.remove('open');
+          menuBtn.textContent = '☰';
+          document.body.style.overflow = '';
+        }
+      });
+    }
+  })();
+</script>
+</body>
+</html>

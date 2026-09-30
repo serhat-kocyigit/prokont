@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PROKONT | Projelerimiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Hero ── */
+    .p-hero { background: var(--navy); color: #fff; padding: 80px 0 60px; text-align: center; }
+    .p-hero h1 { font: 800 clamp(32px,5vw,52px) var(--serif); margin-bottom: 14px; letter-spacing: -.03em; }
+    .p-hero p  { color: #a4b3ae; font-size: 18px; max-width: 620px; margin: 0 auto; line-height: 1.7; }
+
+    /* ── Intro ── */
+    .p-intro { background: var(--cream); padding: 50px 0; border-bottom: 1px solid var(--line); }
+    .p-intro p { max-width: 820px; margin: 0 auto; text-align: center; font-size: 16px; line-height: 1.8; color: var(--muted); }
+
+    /* ── Project Section ── */
+    .project-section { padding: 0; }
+
+    /* ── Project Card ── */
+    .project-card {
+      padding: 60px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .project-card:last-child { border-bottom: none; }
+    .project-card:nth-child(even) { background: var(--cream); }
+
+    .project-card .shell { display: grid; grid-template-columns: 1fr; gap: 28px; }
+
+    .p-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+    .p-header-text { flex: 1; }
+
+    .p-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--green);
+      background: #e8f5ee;
+      padding: 5px 12px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+
+    .p-title {
+      font: 800 clamp(22px,3vw,32px) var(--serif);
+      color: var(--navy);
+      margin: 0 0 6px;
+      letter-spacing: -.02em;
+    }
+    .p-subtitle {
+      font-size: 15px;
+      color: var(--muted);
+      margin: 0;
+      font-weight: 500;
+    }
+
+    .p-logo {
+      width: 140px;
+      height: 70px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .p-logo.large {
+      width: 200px;
+      height: 100px;
+    }
+
+    /* ── Description ── */
+    .p-description {
+      font-size: 15px;
+      line-height: 1.85;
+      color: #4a5c59;
+      max-width: 820px;
+      padding: 0;
+      margin: 0;
+      position: relative;
+    }
+    .p-description::before {
+      content: '';
+      display: inline-block;
+      width: 40px;
+      height: 3px;
+      background: var(--green);
+      margin-bottom: 16px;
+      border-radius: 2px;
+    }
+
+    /* ── Gallery ── */
+    .p-gallery {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 16px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .p-gallery::-webkit-scrollbar { height: 6px; }
+    .p-gallery::-webkit-scrollbar-track { background: #eee; border-radius: 3px; }
+    .p-gallery::-webkit-scrollbar-thumb { background: var(--green); border-radius: 3px; }
+
+    .p-gallery img {
+      flex: 0 0 auto;
+      width: 360px;
+      height: 260px;
+      object-fit: cover;
+      border-radius: 12px;
+      scroll-snap-align: start;
+      cursor: pointer;
+      transition: .3s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    }
+    .p-gallery img:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0,0,0,.14);
+    }
+
+    /* ── Stats Row (optional per card) ── */
+    .p-stats {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .p-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .p-stat strong {
+      font: 800 22px var(--serif);
+      color: var(--navy);
+      letter-spacing: -.03em;
+    }
+    .p-stat span {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    /* ── Lightbox ── */
+    .lightbox {
+      position: fixed; inset: 0;
+      background: rgba(6,23,29,.92);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s;
+      backdrop-filter: blur(6px);
+    }
+    .lightbox.active { opacity: 1; pointer-events: all; }
+    .lightbox img {
+      max-width: 90vw; max-height: 88vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    }
+    .lightbox-close {
+      position: absolute; top: 22px; right: 28px;
+      background: none; border: none;
+      color: #fff; font-size: 36px;
+      cursor: pointer; z-index: 1001;
+      width: 50px; height: 50px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      transition: background .2s;
+    }
+    .lightbox-close:hover { background: rgba(255,255,255,.15); }
+
+    /* ── Responsive ── */
+    @media(max-width: 768px) {
+      .p-hero { padding: 60px 0 45px; }
+      .project-card { padding: 40px 0; }
+
+      .p-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .p-logo {
+        width: auto; height: 50px;
+        max-width: 140px;
+        margin-top: 6px;
+        object-position: left;
+      }
+      .p-logo.large {
+        height: 80px;
+        max-width: 200px;
+      }
+
+      .p-gallery {
+        margin-left: -18px;
+        margin-right: -18px;
+        scroll-padding: 0 24px;
+      }
+      .p-gallery img {
+        width: 82vw;
+        height: 220px;
+        border-radius: 10px;
+      }
+      .p-gallery::before,
+      .p-gallery::after {
+        content: '';
+        flex: 0 0 24px;
+      }
+
+      .p-stats { gap: 20px; }
+      .p-stat strong { font-size: 19px; }
+      .p-description { font-size: 14px; line-height: 1.75; }
+    }
+
+    @media(min-width: 769px) {
+      .project-card .shell {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .p-gallery img {
+        width: 340px;
+        height: 260px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header id="top">
+  <div class="shell nav">
+    <a class="brand" href="index.html">
+      <img src="prokont-logo.png" alt="PROKONT">
+      <span>PROKONT<small>MÜHENDİSLİK & İNŞAAT</small></span>
+    </a>
+    <nav>
+      <a href="index.html">Ana Sayfa</a>
+      <a href="hesaplama-araclari.html">Hesaplama Merkezi</a>
+      <a href="poz-listesi.html">Poz Listesi</a>
+      <a href="planlayici.html">Planlayıcı</a>
+      <a href="karsilastir.html">Karşılaştır</a>
+      <a href="projeler.html" class="active">Projelerimiz</a>
+    </nav>
+    <div class="actions">
+      <button id="searchToggle" aria-label="Arama">⌕</button>
+      <a class="btn orange" href="index.html#offer">Teklif Al →</a>
+      <button id="menu" aria-label="Menü">☰</button>
+    </div>
+  </div>
+  <div id="mobileNav">
+    <div class="mnav-links">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="hesaplama-araclari.html">Hesaplama Merkezi</a>
+      <a href="poz-listesi.html">Poz Listesi</a>
+      <a href="planlayici.html">Planlayıcı</a>
+      <a href="karsilastir.html">Karşılaştır</a>
+      <a href="projeler.html">Projelerimiz</a>
+    </div>
+    <div class="mnav-info">
+      <div class="mnav-card">
+        <div class="mnav-card-header">
+          <img src="prokont-logo.png" alt="PROKONT" class="mnav-logo">
+          <div>
+            <strong>PROKONT Mühendislik</strong>
+            <span>İnşaat & Taahhüt</span>
+          </div>
+        </div>
+        <div class="mnav-location">
+          <a href="https://maps.app.goo.gl/gHApgxnrrzLfrx4T9" target="_blank" rel="noopener noreferrer" class="mnav-map-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Anbar, Organize Cd.<br>38070 Melikgazi / Kayseri</span>
+          </a>
+        </div>
+        <div class="mnav-contacts">
+          <a href="tel:03522314499" class="mnav-contact">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            0352 231 44 99
+          </a>
+          <a href="https://wa.me/905436192262" target="_blank" class="mnav-contact mnav-whatsapp">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.612.616l4.532-1.47A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.24 0-4.308-.724-5.993-1.953l-.42-.306-2.693.874.894-2.657-.335-.437A9.96 9.96 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+            0543 619 22 62
+          </a>
+          <a href="mailto:info@prokontinsaat.com" class="mnav-contact">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            info@prokontinsaat.com
+          </a>
+        </div>
+        <a href="index.html#offer" class="mnav-cta">Teklif Al →</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ════════ HERO ════════ -->
+<div class="p-hero">
+  <div class="shell">
+    <h1>Referanslar & Projelerimiz</h1>
+    <p>25 yılı aşkın tecrübemizle tamamladığımız projelerimizi ve güçlü iş ortaklıklarımızı keşfedin.</p>
+  </div>
+</div>
+
+<!-- ════════ INTRO ════════ -->
+<div class="p-intro">
+  <div class="shell">
+    <p><strong>PROKONT MÜHENDİSLİK İNŞAAT LTD. ŞTİ.</strong> olarak, kalite ve yeniliğe olan bağlılığımızla üst düzey inşaat ve taahhüt hizmetleri sunmaktan gurur duyuyoruz. 25 yılı aşkın süredir güçlü iş ortaklıkları kurarak ve farklı alanlarda projeler tamamlayarak uzmanlığımızı ve bağlılığımızı ortaya koyuyoruz.</p>
+  </div>
+</div>
+
+<!-- ════════ PROJECTS ════════ -->
+<main class="project-section">
+
+  <!-- ── Royal İlaç ── -->
+  <div class="project-card">
+    <div class="shell">
+      <div class="p-header">
+        <div class="p-header-text">
+          <span class="p-badge">15+ Yıllık İş Ortaklığı</span>
+          <h2 class="p-title">Royal İlaç Sanayi</h2>
+          <p class="p-subtitle">Üretim Tesisi İmalat ve Dekorasyonu</p>
+        </div>
+        <img src="assets/referanslar/royal-ilac-logo-new.png" alt="Royal İlaç Logo" class="p-logo">
+      </div>
+      <p class="p-description">Hayvansal tarım ilaçları üretiminde lider bir firma olan Royal İlaç Sanayi'nin 15 yılı aşkın süredir güvenilir inşaat ortağıyız. Şirket, 18.000 metrekarelik geniş bir arazi üzerinde faaliyet göstermekte olup, 25.000 metrekarelik kapalı üretim alanına sahiptir. PROKONT olarak, tesisin temelden çatıya tüm inşaat çalışmalarını üstlenerek modern, verimli ve dayanıklı bir yapı oluşturduk.</p>
+      <div class="p-stats">
+        <div class="p-stat"><strong>18.000 m²</strong><span>Arazi Alanı</span></div>
+        <div class="p-stat"><strong>25.000 m²</strong><span>Kapalı Alan</span></div>
+        <div class="p-stat"><strong>15+ Yıl</strong><span>İş Ortaklığı</span></div>
+      </div>
+      <div class="p-gallery">
+        <img src="assets/referanslar/e4cbd96c85d64c1a477a44b1141808d0.jpg" alt="Royal İlaç Proje">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DAVIVA ── -->
+  <div class="project-card">
+    <div class="shell">
+      <div class="p-header">
+        <div class="p-header-text">
+          <span class="p-badge">2023'ten Beri</span>
+          <h2 class="p-title">DAVIVA Healthcare</h2>
+          <p class="p-subtitle">Anahtar Teslim Diyaliz Merkezi İnşaatı</p>
+        </div>
+        <img src="assets/referanslar/DAVIVA_LOGO-01-2048x788-1.png" alt="DAVIVA Logo" class="p-logo">
+      </div>
+      <p class="p-description">İstanbul merkezli özel bir diyaliz merkezi zinciri olan DAVIVA Healthcare, Türkiye genelinde ileri teknoloji sağlık hizmetleri sunmaktadır. 2023 yılının başlarında başlayan iş ortaklığımız kapsamında, Kayseri'de üç adet anahtar teslim diyaliz merkezi inşa ederek başladığımız projelerimize Samsun'da iki yeni tesis ile devam etmekteyiz. Bu ortaklık, sağlık sektörü için en son teknolojiye uygun tesisler inşa etme konusundaki uzmanlığımızı vurgulamaktadır.</p>
+      <div class="p-stats">
+        <div class="p-stat"><strong>3</strong><span>Kayseri Merkezi</span></div>
+        <div class="p-stat"><strong>2</strong><span>Samsun Merkezi</span></div>
+      </div>
+      <div class="p-gallery">
+        <img src="assets/referanslar/IMG_20240930_133539-1024x771.jpg" alt="DAVIVA Proje 1">
+        <img src="assets/referanslar/IMG_20240930_133541-1024x771.jpg" alt="DAVIVA Proje 2">
+        <img src="assets/referanslar/IMG_20240930_140325-1024x771.jpg" alt="DAVIVA Proje 3">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Donas ── -->
+  <div class="project-card">
+    <div class="shell">
+      <div class="p-header">
+        <div class="p-header-text">
+          <span class="p-badge">15+ Yıllık İş Birliği</span>
+          <h2 class="p-title">Donas Döner</h2>
+          <p class="p-subtitle">Şube Konsept Uygulamaları</p>
+        </div>
+        <img src="assets/referanslar/Adsiz-tasarim-8-1.png" alt="Donas Logo" class="p-logo large">
+      </div>
+      <p class="p-description">Türkiye genelinde şubeleri bulunan Donas Döner restoran zinciri, 15 yılı aşkın süredir PROKONT ile iş birliği yapmaktadır. Yeni şubelerin kurulumu, tesis inşaatı ve restoran tadilatlarında aktif rol oynayarak, işlevsel, estetik ve yüksek kaliteli alanlar sunmaya devam ediyoruz.</p>
+      <div class="p-gallery">
+        <img src="assets/referanslar/donas-istasyon-subesi-1024x576.jpg" alt="Donas Proje 1">
+        <img src="assets/referanslar/donas-kahramanmaras-onikisubat-ea5a2.jpg" alt="Donas Proje 2">
+        <img src="assets/referanslar/r467-Donas-Duvenonu-design-1024x576.jpg" alt="Donas Proje 3">
+        <img src="assets/referanslar/IMG-20220125-WA0007-1024x1021.jpg" alt="Donas Proje 4">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Meka Boya ── -->
+  <div class="project-card">
+    <div class="shell">
+      <div class="p-header">
+        <div class="p-header-text">
+          <span class="p-badge">~15 Yıllık Güven</span>
+          <h2 class="p-title">Meka Boya</h2>
+          <p class="p-subtitle">Endüstriyel Tesis İnşaatı</p>
+        </div>
+        <img src="assets/referanslar/Adsiz-tasarim-6.png" alt="Meka Logo" class="p-logo large">
+      </div>
+      <p class="p-description">Kayseri merkezli bir endüstriyel boya üreticisi olan Meka Boya, yaklaşık 15 yıldır inşaat projelerinde bize güvenmektedir. Ana yüklenici olarak, firmanın üretim ihtiyaçlarını karşılayan modern ve verimli tesisler inşa ettik ve teslim ettik.</p>
+      <div class="p-gallery">
+        <img src="assets/referanslar/141130294_tCT6cwPJOrWMhT50V3mzJXDU_19YjqoJadrPsr-6iNE.jpg" alt="Meka Proje 1">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Şato Yemek ── -->
+  <div class="project-card">
+    <div class="shell">
+      <div class="p-header">
+        <div class="p-header-text">
+          <span class="p-badge">14 Yıllık İş Ortaklığı</span>
+          <h2 class="p-title">Şato Yemek Hizmetleri</h2>
+          <p class="p-subtitle">Üretim Tesisi ve Çiftlik Yapıları</p>
+        </div>
+        <img src="assets/referanslar/Adsiz-tasarim-3.png" alt="Şato Logo" class="p-logo large">
+      </div>
+      <p class="p-description">Kayseri bölgesinde faaliyet gösteren Şato Yemek Hizmetleri, geniş çapta catering hizmetleri sunmanın yanı sıra süt ve hayvansal ürün üretimi yapmaktadır. Son 14 yıldır, firmanın üretim tesisleri ve çiftlik yapılarının tasarım ve inşaat süreçlerini üstlenerek, endüstriyel verimliliğini destekleyen güçlü bir altyapı sağladık.</p>
+      <div class="p-gallery">
+        <img src="assets/referanslar/SATO-YEMEK-1024x945.jpg" alt="Şato Proje 1">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Milky Royal ── -->
+  <div class="project-card">
+    <div class="shell">
+      <div class="p-header">
+        <div class="p-header-text">
+          <span class="p-badge">Endüstriyel Üretim</span>
+          <h2 class="p-title">Milky Royal</h2>
+          <p class="p-subtitle">Modern Üretim Tesisi İnşaatı</p>
+        </div>
+        <img src="assets/referanslar/milky-royal-logo-new.png" alt="Milky Royal Logo" class="p-logo">
+      </div>
+      <p class="p-description">Aydın'ın Ortaklar ilçesi Organize Sanayi Bölgesi'nde kurulu olan Milky Royal, süt ve süt ürünleri sektöründe geniş bir üretim yelpazesine sahiptir. Şirket, peynir altı suyu tozu, protein tozu gibi yüksek katma değerli ürünler üretiminde uzmanlaşmıştır. PROKONT olarak, firmanın modern üretim tesislerinin inşaatını üstlendik ve süreç boyunca yüksek hijyen standartlarına ve endüstriyel ihtiyaçlara uygun çözümler sağladık.</p>
+      <div class="p-gallery">
+        <img src="assets/referanslar/IMG_20220323_094101-1024x768.jpg" alt="Milky Proje 1">
+        <img src="assets/referanslar/IMG_20220323_094315-1024x768.jpg" alt="Milky Proje 2">
+        <img src="assets/referanslar/IMG_20220323_094438-1024x768.jpg" alt="Milky Proje 3">
+        <img src="assets/referanslar/IMG_20220323_095027-1024x768.jpg" alt="Milky Proje 4">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Lavaş Center ── -->
+  <div class="project-card">
+    <div class="shell">
+      <div class="p-header">
+        <div class="p-header-text">
+          <span class="p-badge">10+ Yıllık İş Birliği</span>
+          <h2 class="p-title">Lavaş Center</h2>
+          <p class="p-subtitle">Restoran ve Üretim Tesisi Kurulumu</p>
+        </div>
+        <img src="assets/referanslar/Adsiz-tasarim-9.png" alt="Lavaş Center Logo" class="p-logo large">
+      </div>
+      <p class="p-description">Türkiye genelinde unlu mamuller ve hızlı tüketim sektöründe faaliyet gösteren Lavaş Center, restoran ve üretim tesisi kurulumlarında uzmanlaşmış bir markadır. Şirketin ihtiyaç duyduğu yeni tesislerin inşası, mevcut yapıların tadilatı ve modernizasyonu gibi projelerde 10 yılı aşkın süredir iş birliği yapmaktayız. PROKONT olarak, firmanın operasyonel verimliliğini artırmaya yönelik, yüksek standartlarda ve işlevsel çözümler sunuyoruz.</p>
+      <div class="p-gallery">
+        <img src="assets/referanslar/r6ab-Lavas-Center-exterior.jpg" alt="Lavaş Proje 1">
+        <img src="assets/referanslar/438231-0-lavas-center-1024x576.jpg" alt="Lavaş Proje 2">
+        <img src="assets/referanslar/51004000_84YQ0g7QPwtR08b-aww1GHfdL_FFCOPkjJL18T4Ltd8.jpg" alt="Lavaş Proje 4">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Belediyeler ── -->
+  <div class="project-card">
+    <div class="shell">
+      <div class="p-header">
+        <div class="p-header-text">
+          <span class="p-badge">25 Yıllık Tecrübe</span>
+          <h2 class="p-title">Belediyeler ve Diğer Projeler</h2>
+          <p class="p-subtitle">Kamu ve Özel Sektör Projeleri</p>
+        </div>
+      </div>
+      <p class="p-description">25 yıllık tecrübemizle, Türkiye'nin birçok ilinde belediye ihaleleri kapsamında kamu projelerini başarıyla tamamladık. Bunun yanı sıra, özel sektör ve bireysel müşterilerimiz için birçok farklı inşaat projesinde kalite, güvenlik ve müşteri memnuniyeti önceliğimiz oldu. PROKONT olarak, her proje ve iş birliğimiz, inşaat alanındaki mükemmeliyet anlayışımıza olan bağlılığımızın bir göstergesidir.</p>
+      <div class="p-gallery">
+        <img src="assets/referanslar/IMG_20220608_195129-1024x768.jpg" alt="Belediye Proje 1">
+        <img src="assets/referanslar/IMG_20220609_192030-1024x768.jpg" alt="Belediye Proje 2">
+        <img src="assets/referanslar/IMG_20221127_133309-1024x768.jpg" alt="Belediye Proje 3">
+        <img src="assets/referanslar/IMG_20230111_075557-1024x764.jpg" alt="Belediye Proje 4">
+        <img src="assets/referanslar/IMG_20230415_144347-1024x768.jpg" alt="Belediye Proje 5">
+        <img src="assets/referanslar/erciyes-hukuk-5-Custom.jpg" alt="Belediye Proje 6">
+        <img src="assets/referanslar/erciyes_univ.jpg" alt="Belediye Proje 7">
+        <img src="assets/referanslar/128941867_151dMB5mwEFu8AHG86SNGxNLVMrKJeuLQMTB7h2osX0.jpg" alt="Belediye Proje 8">
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ════════ CTA ════════ -->
+<section class="offer" id="offer">
+  <div class="shell">
+    <div>
+      <p class="eyebrow light">— PROKONT YANINDA</p>
+      <h2>Projeniz için <em>teklif alın.</em></h2>
+      <p>Siz de projenizi bizimle hayata geçirmek istiyorsanız detayları paylaşın, uzman ekibimiz en uygun teklifi hazırlasın.</p>
+    </div>
+    <div>
+      <a class="btn orange" href="index.html#offer">Teklif talep et →</a>
+      <a class="btn ghost" href="tel:03522314499">WhatsApp'tan görüş →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="shell copy">
+    © 2026 PROKONT Mühendislik & İnşaat Ltd. Şti. <span>Hesaplamalar yaklaşık maliyetlerdir.</span>
+  </div>
+</footer>
+
+<!-- ════════ Scripts ════════ -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">&times;</button>
+  <img src="" alt="Büyütülmüş Görsel" id="lightboxImg">
+</div>
+
+<script>
+  // Lightbox
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+  document.querySelectorAll('.p-gallery img').forEach(img => {
+    img.addEventListener('click', function() {
+      lightboxImg.src = this.src;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+  // Mobile Menu
+  (function(){
+    const menuBtn = document.getElementById('menu');
+    const mobileNav = document.getElementById('mobileNav');
+    if(menuBtn && mobileNav) {
+      menuBtn.onclick = () => {
+        const isOpen = mobileNav.classList.toggle('open');
+        menuBtn.textContent = isOpen ? '✕' : '☰';
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+      };
+      mobileNav.querySelectorAll('.mnav-links a, .mnav-cta').forEach(a => a.onclick = () => {
+        mobileNav.classList.remove('open');
+        menuBtn.textContent = '☰';
+        document.body.style.overflow = '';
+      });
+      mobileNav.addEventListener('click', (e) => {
+        if(e.target === mobileNav) {
+          mobileNav.classList.remove('open');
+          menuBtn.textContent = '☰';
+          document.body.style.overflow = '';
+        }
+      });
+    }
+  })();
+</script>
+<script src="app.js?v=4"></script>
+</body>
+</html>

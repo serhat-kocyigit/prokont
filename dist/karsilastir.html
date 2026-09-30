@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PROKONT | Malzeme Karşılaştırma Merkezi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --bg: #f5f8f6;
+      --card: #ffffff;
+      --border: #e2eae5;
+      --text: #102b3a;
+      --muted: #71817c;
+      --green: #21805d;
+      --orange: #e86a33;
+    }
+    body { background: var(--bg); }
+    
+    .compare-header { background: var(--text); color: #fff; padding: 60px 0 80px; text-align: center; }
+    .compare-header h1 { font: 800 40px var(--serif); margin: 10px 0; }
+    .compare-header p { color: #a4b3ae; font-size: 18px; max-width: 700px; margin: 0 auto; line-height: 1.5; }
+    
+    .compare-container { margin-top: -40px; padding-bottom: 80px; }
+    
+    .c-card { background: var(--card); border-radius: 12px; box-shadow: 0 15px 40px rgba(16,43,58,0.08); overflow: hidden; display: flex; align-items: flex-start; }
+    
+    .c-sidebar { width: 260px; background: #fafcfb; border-right: 1px solid var(--border); padding: 20px 0; max-height: 80vh; overflow-y: auto; flex-shrink: 0; }
+    .c-tab { display: block; padding: 16px 24px; font: 700 14px var(--sans); color: var(--muted); cursor: pointer; border-left: 4px solid transparent; transition: .2s; text-align: left; background: none; border-top: none; border-right: none; border-bottom: 1px solid var(--border); width: 100%; outline: none; }
+    .c-tab:last-child { border-bottom: none; }
+    .c-tab:hover { color: var(--text); background: #f4f7f5; }
+    .c-tab.active { color: var(--green); border-left-color: var(--green); background: #fff; }
+    
+    .c-content { flex: 1; min-width: 0; }
+    
+    .c-controls { padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: #fff; }
+    .c-controls span { font: 600 13px var(--sans); color: var(--orange); background: #fdf5e8; padding: 8px 16px; border-radius: 6px; display: flex; align-items: center; gap: 8px; }
+    .c-controls span::before { content: 'ℹ'; font-weight: 800; }
+    
+    .c-table { width: 100%; border-collapse: collapse; background: #fff; }
+    .c-table th { text-align: left; padding: 16px 20px; font: 700 12px var(--sans); color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid var(--border); background: #fafcfb; }
+    .c-table td { padding: 20px; border-bottom: 1px solid var(--border); font: 500 15px var(--sans); color: var(--text); vertical-align: middle; }
+    .c-table tr:last-child td { border-bottom: none; }
+    .c-table tr:hover td { background: #fdfefe; }
+    
+    .m-name { font: 800 18px var(--sans); color: var(--green); display: block; margin-bottom: 4px; }
+    .m-desc { font-size: 13px; color: var(--muted); }
+    
+    .m-price { font: 800 20px var(--sans); color: var(--text); }
+    
+    .m-feature { display: inline-flex; align-items: center; gap: 6px; background: #f0f4f2; padding: 6px 12px; border-radius: 20px; font: 600 12px var(--sans); color: var(--text); margin-bottom: 4px; margin-right: 4px; }
+    
+    .m-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: 0.05em; }
+    .m-badge.high { background: #e3f2ec; color: var(--green); }
+    .m-badge.mid { background: #fcf1e8; color: var(--orange); }
+    
+    @media(max-width: 900px) {
+      .c-card { flex-direction: column; }
+      .c-sidebar { width: 100%; display: flex; border-right: none; border-bottom: 1px solid var(--border); padding: 0; max-height: none; overflow-x: auto; }
+      .c-tab { border-left: none; border-bottom: 4px solid transparent; border-right: 1px solid var(--border); padding: 16px; text-align: center; white-space: nowrap; }
+      .c-tab.active { border-bottom-color: var(--green); }
+      .c-table thead { display: none; }
+      .c-table, .c-table tbody, .c-table tr, .c-table td { display: block; width: 100%; }
+      .c-table tr { margin-bottom: 16px; border: 1px solid var(--border); border-radius: 8px; }
+      .c-table td { text-align: right; padding: 12px 16px; position: relative; border-bottom: 1px dotted var(--border); }
+      .c-table td::before { content: attr(data-label); position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font: 700 12px var(--sans); color: var(--muted); text-transform: uppercase; }
+      .m-name, .m-desc { text-align: right; }
+    }
+  </style>
+</head>
+<body>
+
+<header id="top">
+  <div class="shell nav">
+    <a class="brand" href="index.html">
+      <img src="prokont-logo.png" alt="PROKONT">
+      <span>PROKONT<small>MÜHENDİSLİK & İNŞAAT</small></span>
+    </a>
+    <nav>
+      <a href="index.html">Ana Sayfa</a>
+      <a href="hesaplama-araclari.html">Hesaplama Merkezi</a>
+      <a href="poz-listesi.html">Poz Listesi</a>
+      <a href="planlayici.html">Planlayıcı</a>
+      <a href="karsilastir.html" class="active">Karşılaştır</a>
+      <a href="projeler.html">Projelerimiz</a>
+    </nav>
+    <div class="actions">
+      <button id="searchToggle" aria-label="Arama">⌕</button>
+      <a class="btn orange" href="index.html#offer">Teklif Al →</a>
+      <button id="menu" aria-label="Menü">☰</button>
+    </div>
+  </div>
+<div id="mobileNav">
+    <div class="mnav-links">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="hesaplama-araclari.html">Hesaplama Merkezi</a>
+      <a href="poz-listesi.html">Poz Listesi</a>
+      <a href="planlayici.html">Planlayıcı</a>
+      <a href="karsilastir.html">Karşılaştır</a>
+      <a href="projeler.html">Projelerimiz</a>
+    </div>
+    <div class="mnav-info">
+      <div class="mnav-card">
+        <div class="mnav-card-header">
+          <img src="prokont-logo.png" alt="PROKONT" class="mnav-logo">
+          <div>
+            <strong>PROKONT Mühendislik</strong>
+            <span>İnşaat & Taahhüt</span>
+          </div>
+        </div>
+        <div class="mnav-location">
+          <a href="https://maps.app.goo.gl/gHApgxnrrzLfrx4T9" target="_blank" class="mnav-map-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Sahabiye Mah. Ahmet Paşa Cd. No:32/D<br>Kocasinan / Kayseri</span>
+          </a>
+        </div>
+        <div class="mnav-contacts">
+          <a href="tel:03522314499" class="mnav-contact">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            0352 231 44 99
+          </a>
+          <a href="https://wa.me/905436192262" target="_blank" class="mnav-contact mnav-whatsapp">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.612.616l4.532-1.47A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.24 0-4.308-.724-5.993-1.953l-.42-.306-2.693.874.894-2.657-.335-.437A9.96 9.96 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+            0543 619 22 62
+          </a>
+          <a href="mailto:info@prokontinsaat.com" class="mnav-contact">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            info@prokontinsaat.com
+          </a>
+        </div>
+        <a href="index.html#offer" class="mnav-cta">Teklif Al →</a>
+      </div>
+    </div>
+  </div></header>
+
+<div class="compare-header">
+  <div class="shell">
+    <h1>Malzeme Karşılaştırma Merkezi</h1>
+    <p>50'den fazla inşaat ve dekorasyon malzemesinin salt malzeme birim fiyatlarını ve teknik özelliklerini karşılaştırın. İşçilik ve sarf malzemeleri hariçtir.</p>
+  </div>
+</div>
+
+<div class="shell compare-container">
+  <div class="c-card">
+    
+    <div class="c-sidebar" id="catTabs">
+      <button class="c-tab active" data-cat="alci_siva">Alçı, Sıva ve Harçlar</button>
+      <button class="c-tab" data-cat="insulation">Dış Cephe Yalıtım</button>
+      <button class="c-tab" data-cat="flooring">Zemin Kaplamaları</button>
+      <button class="c-tab" data-cat="seramik">Seramik ve Fayans</button>
+      <button class="c-tab" data-cat="paint">Boya ve Yüzey</button>
+      <button class="c-tab" data-cat="roof">Çatı Sistemleri</button>
+      <button class="c-tab" data-cat="kitchen">Mutfak Tezgahları</button>
+      <button class="c-tab" data-cat="doors">İç ve Dış Kapılar</button>
+      <button class="c-tab" data-cat="windows">Pencere Sistemleri</button>
+      <button class="c-tab" data-cat="waterproofing">Su İzolasyonu</button>
+      <button class="c-tab" data-cat="plumbing">Tesisat Boruları</button>
+      <button class="c-tab" data-cat="electric">Anahtar ve Prizler</button>
+    </div>
+    
+    <div class="c-content">
+      <div class="c-controls">
+        <h3 id="catTitle" style="font:800 18px var(--sans); color:var(--text);">Alçı, Sıva ve Harçlar</h3>
+        <span>Tüm fiyatlar SADECE MALZEME birim fiyatıdır (İşçilik Hariç)</span>
+      </div>
+      
+      <table class="c-table">
+        <thead>
+          <tr>
+            <th width="30%">Malzeme Seçeneği</th>
+            <th width="20%">Salt Malzeme Fiyatı</th>
+            <th width="35%">Öne Çıkan Özellikler</th>
+            <th width="15%">Performans</th>
+          </tr>
+        </thead>
+        <tbody id="compareBody">
+          <!-- JS fills this -->
+        </tbody>
+      </table>
+    </div>
+    
+  </div>
+</div>
+
+<script>
+const money = (n, unit) => new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 0 }).format(Math.round(n)) + ' TL <small style="font-size:12px;color:var(--muted);font-weight:600;">/ ' + unit + '</small>';
+
+const db = {
+  alci_siva: [
+    { name: 'Makine Sıva Alçısı', desc: 'İç mekan kaba alçı uygulaması.', price: 145, unit: 'Torba (35kg)', features: ['Hızlı kuruma', 'Kolay mastar'], perf: 'Orta', badge: 'mid' },
+    { name: 'Saten Perdah Alçısı', desc: 'Boya öncesi pürüzsüz yüzey.', price: 165, unit: 'Torba (25kg)', features: ['Cam gibi yüzey', 'Boyaya hazır'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Çimento Esaslı Sıva', desc: 'Islak hacim ve dış cephe kaba sıva.', price: 190, unit: 'Torba (25kg)', features: ['Neme dayanım', 'Yüksek mukavemet'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Alçıpan Levha (Beyaz)', desc: 'Standart bölme duvar levhası.', price: 185, unit: 'Adet (2.5m²)', features: ['Hızlı uygulama', 'Ekonomik'], perf: 'Orta', badge: 'mid' },
+    { name: 'Alçıpan Levha (Yeşil)', desc: 'Neme dayanıklı ıslak hacim levhası.', price: 260, unit: 'Adet (2.5m²)', features: ['Su itici', 'Küf tutmaz'], perf: 'Yüksek', badge: 'high' }
+  ],
+  insulation: [
+    { name: 'Beyaz EPS (16 Dansite)', desc: 'Ekonomik geleneksel ısı yalıtım levhası.', price: 280, unit: 'm²', features: ['Standart yalıtım', 'Çok ekonomik'], perf: 'Orta', badge: 'mid' },
+    { name: 'Karbonlu EPS', desc: 'Isı iletkenliği düşük yalıtım.', price: 420, unit: 'm²', features: ['%20 Daha fazla yalıtım', 'İnce uygulama'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Taş Yünü', desc: 'A1 Sınıfı yanmaz doğal yalıtım.', price: 950, unit: 'm²', features: ['Tam yanmaz', 'Ses yalıtımı'], perf: 'Yüksek', badge: 'high' },
+    { name: 'XPS Levha', desc: 'Sert, yüksek basınca dayanıklı.', price: 650, unit: 'm²', features: ['Su emmez', 'Zemin/Tavan altı'], perf: 'Yüksek', badge: 'high' }
+  ],
+  flooring: [
+    { name: 'Laminat Parke (31. Sınıf)', desc: 'Ekonomik konut tipi laminat.', price: 280, unit: 'm²', features: ['Hızlı montaj', 'Uygun fiyat'], perf: 'Orta', badge: 'mid' },
+    { name: 'Laminat Parke (33. Sınıf)', desc: 'Yoğun trafik AC5 derzli parke.', price: 480, unit: 'm²', features: ['Çizilmez', 'Suya ekstra direnç'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Lamine Parke', desc: 'Doğal ahşap prestijli zemin.', price: 2200, unit: 'm²', features: ['Gerçek ahşap', 'Zımparalanabilir'], perf: 'Yüksek', badge: 'high' },
+    { name: 'LVT / SPC Vinil', desc: 'Taş kompozit suya dayanıklı zemin.', price: 850, unit: 'm²', features: ['%100 Suya dayanım', 'Yerden ısıtmaya uygun'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Epoksi Zemin', desc: 'Eksiz sanayi / dekoratif zemin.', price: 1400, unit: 'm²', features: ['Kimyasal direnci', 'Eksiz bütünlük'], perf: 'Yüksek', badge: 'high' }
+  ],
+  seramik: [
+    { name: 'Standart Fayans', desc: '30x60 veya 45x45 iç mekan.', price: 350, unit: 'm²', features: ['Geniş desen seçeneği', 'Duvar için ideal'], perf: 'Orta', badge: 'mid' },
+    { name: 'Granit Seramik', desc: '60x60 sırlı granit.', price: 650, unit: 'm²', features: ['Aşınma direnci', 'Dış mekan uyumu'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Porselen Seramik', desc: '60x120 büyük ebat rektifiyeli.', price: 1200, unit: 'm²', features: ['Dar derz aralığı', 'Lüks görünüm'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Cam Mozaik', desc: 'Banyo ve havuz içi fileli mozaik.', price: 1800, unit: 'm²', features: ['Kıvrımlı yüzey', 'Dekoratif'], perf: 'Yüksek', badge: 'high' }
+  ],
+  paint: [
+    { name: 'Plastik Boya', desc: 'Mat, ekonomik tavan/duvar boyası.', price: 950, unit: 'Kova (15L)', features: ['Mat görünüm', 'Ucuz'], perf: 'Orta', badge: 'mid' },
+    { name: 'Silikonlu İç Cephe', desc: 'Tam silinebilir ipek mat (Marshall/Filli vb).', price: 3950, unit: 'Kova (15L)', features: ['Leke tutmaz', 'Kolay silinir'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Akrilik Dış Cephe', desc: 'Su bazlı standart dış cephe.', price: 3200, unit: 'Kova (15L)', features: ['UV direnci', 'Renk solmazlığı'], perf: 'Orta', badge: 'mid' },
+    { name: 'Elastik Dış Cephe', desc: 'Çatlak köprüleyici saf akrilik.', price: 5800, unit: 'Kova (15L)', features: ['Su geçirmez', 'Esnek yapı'], perf: 'Yüksek', badge: 'high' }
+  ],
+  roof: [
+    { name: 'Toprak Kiremit', desc: 'Klasik geçmeli kiremit.', price: 550, unit: 'm²', features: ['Nefes alır', 'Geleneksel'], perf: 'Orta', badge: 'mid' },
+    { name: 'Sandviç Panel', desc: '40mm poliüretan dolgulu.', price: 1100, unit: 'm²', features: ['Hızlı kaplama', 'Isı yalıtımlı'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Shingle', desc: 'Membran üzeri esnek kaplama.', price: 420, unit: 'm²', features: ['Hafif', 'Karmaşık çatılar'], perf: 'Orta', badge: 'mid' },
+    { name: 'Trapez Sac', desc: 'Boyalı galvaniz sac levha.', price: 380, unit: 'm²', features: ['Çok ekonomik', 'Endüstriyel'], perf: 'Orta', badge: 'mid' }
+  ],
+  kitchen: [
+    { name: 'Laminat Tezgah', desc: 'Sunta üzeri HPL kaplama.', price: 1800, unit: 'mtül', features: ['Ahşap görünüm', 'Ekonomik'], perf: 'Orta', badge: 'mid' },
+    { name: 'Doğal Granit', desc: 'Sert yüzeyli doğal taş.', price: 5500, unit: 'mtül', features: ['Isıya dayanıklı', 'Doğal damarlar'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Kuvars (Çimstone)', desc: '%93 Kuvars reçine kompozit.', price: 8500, unit: 'mtül', features: ['Çizilmez', 'Asit ve limona dirençli'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Akrilik (Corian vb.)', desc: 'Eksiz birleşen katı yüzey.', price: 13500, unit: 'mtül', features: ['Eksiz lavabo', 'Tamir edilebilir'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Porselen (Dekton vb.)', desc: 'Ultra sıkıştırılmış yeni nesil.', price: 21000, unit: 'mtül', features: ['Ateşe tam dayanım', 'UV solmazlığı'], perf: 'Yüksek', badge: 'high' }
+  ],
+  doors: [
+    { name: 'Amerikan Panel Kapı', desc: 'MDF pres standart iç kapı.', price: 2800, unit: 'Adet', features: ['Ekonomik', 'Hafif'], perf: 'Orta', badge: 'mid' },
+    { name: 'Melamin Kapı', desc: 'Ahşap desenli çizilmez yüzey.', price: 4500, unit: 'Adet', features: ['Çizilme direnci', 'Boyasız'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Lake Kapı', desc: 'Poliüretan boyalı pürüzsüz yüzey.', price: 11500, unit: 'Adet', features: ['Lüks görünüm', 'İstenen renk'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Çelik Kapı (Standart)', desc: '1.2mm sac, ahşap kaplama dış kapı.', price: 12500, unit: 'Adet', features: ['Temel güvenlik', 'Apartman içi'], perf: 'Orta', badge: 'mid' },
+    { name: 'Çelik Kapı (Villa Tipi)', desc: 'Kompakt laminant, çift kilit.', price: 32000, unit: 'Adet', features: ['Dış iklim dayanımı', 'Yüksek güvenlik'], perf: 'Yüksek', badge: 'high' }
+  ],
+  windows: [
+    { name: 'PVC Doğrama (70mm)', desc: '5 odacıklı standart PVC.', price: 2500, unit: 'm²', features: ['Isı yalıtımı', 'Uygun fiyat'], perf: 'Orta', badge: 'mid' },
+    { name: 'PVC Doğrama (80mm)', desc: 'Üst düzey ısı ve ses yalıtımı.', price: 4200, unit: 'm²', features: ['3 Conta', 'Maksimum yalıtım'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Alüminyum (Yalıtımsız)', desc: 'Standart vitrin ve iç bölme.', price: 4800, unit: 'm²', features: ['İnce profil', 'Uzun ömür'], perf: 'Orta', badge: 'mid' },
+    { name: 'Alüminyum (Isı Yalıtımlı)', desc: 'Isı bariyerli cephe doğraması.', price: 9500, unit: 'm²', features: ['Rijit yapı', 'Terleme yapmaz'], perf: 'Yüksek', badge: 'high' }
+  ],
+  waterproofing: [
+    { name: 'Bitümlü Membran', desc: 'Şalümo ile uygulanan rulo.', price: 220, unit: 'm²', features: ['Temel ve çatı', 'Geleneksel'], perf: 'Orta', badge: 'mid' },
+    { name: 'Çift Komponentli Çimento', desc: 'Sürme esaslı banyo/havuz yalıtımı.', price: 850, unit: 'Takım (30kg)', features: ['Seramik altına uygun', 'Esnek'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Poliüretan Likit', desc: 'Güneş dayanımlı eksiz teras yalıtımı.', price: 2400, unit: 'Kova (20kg)', features: ['UV Dayanımlı', 'Üzerinde yürünebilir'], perf: 'Yüksek', badge: 'high' }
+  ],
+  plumbing: [
+    { name: 'PPRC Plastik Boru', desc: 'Temiz su tesisat borusu.', price: 65, unit: 'mtül', features: ['Kaynaklı birleşim', 'Standart'], perf: 'Orta', badge: 'mid' },
+    { name: 'PEX Mobil Sistem', desc: 'Kılıflı kırmadan değişen sistem.', price: 160, unit: 'mtül', features: ['Eksiz hat', 'Değiştirilebilir'], perf: 'Yüksek', badge: 'high' },
+    { name: 'PVC Pis Su Borusu', desc: 'Gri atık su borusu.', price: 110, unit: 'mtül', features: ['Contalı sistem', 'Kolay montaj'], perf: 'Orta', badge: 'mid' },
+    { name: 'Sessiz Pis Su Borusu', desc: 'Kalın cidarlı akustik boru.', price: 280, unit: 'mtül', features: ['Ses yalıtımı', 'Darbelere dayanıklı'], perf: 'Yüksek', badge: 'high' }
+  ],
+  electric: [
+    { name: 'Standart Beyaz Priz', desc: 'Klasik plastik gövde.', price: 140, unit: 'Adet', features: ['Ekonomik', 'Kolay bulunabilirlik'], perf: 'Orta', badge: 'mid' },
+    { name: 'Metalik / Renkli Seriler', desc: 'Antrasit, inox renk seçenekli.', price: 350, unit: 'Adet', features: ['Dekoratif', 'Leke göstermez'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Cam Çerçeveli', desc: 'Cam görünümlü lüks mekanizma.', price: 650, unit: 'Adet', features: ['Çizilmez çerçeve', 'Prestijli görünüm'], perf: 'Yüksek', badge: 'high' },
+    { name: 'Akıllı Ev Anahtarı', desc: 'Wi-fi / Dokunmatik akıllı priz.', price: 1850, unit: 'Adet', features: ['Uygulama kontrolü', 'Senaryo özelliği'], perf: 'Yüksek', badge: 'high' }
+  ]
+};
+
+let activeCat = 'alci_siva';
+
+function render() {
+  const items = db[activeCat];
+  let html = '';
+  items.forEach(item => {
+    const feats = item.features.map(f => `<span class="m-feature">${f}</span>`).join('');
+    html += `
+      <tr>
+        <td data-label="Seçenek">
+          <span class="m-name">${item.name}</span>
+          <span class="m-desc">${item.desc}</span>
+        </td>
+        <td data-label="Birim Fiyat">
+          <div class="m-price">${money(item.price, item.unit)}</div>
+        </td>
+        <td data-label="Özellikler">
+          ${feats}
+        </td>
+        <td data-label="Performans">
+          <span class="m-badge ${item.badge}">${item.perf}</span>
+        </td>
+      </tr>
+    `;
+  });
+  
+  document.getElementById('compareBody').innerHTML = html;
+  
+  // Update Title
+  const activeBtn = document.querySelector(`.c-tab[data-cat="${activeCat}"]`);
+  document.getElementById('catTitle').textContent = activeBtn.textContent;
+}
+
+document.querySelectorAll('.c-tab').forEach(tab => {
+  tab.addEventListener('click', (e) => {
+    document.querySelectorAll('.c-tab').forEach(t => t.classList.remove('active'));
+    e.target.classList.add('active');
+    activeCat = e.target.dataset.cat;
+    render();
+  });
+});
+
+// Initial
+render();
+
+</script>
+<script>
+  (function(){
+    const menuBtn = document.getElementById('menu');
+    const mobileNav = document.getElementById('mobileNav');
+    if(menuBtn && mobileNav) {
+      menuBtn.onclick = () => {
+        const isOpen = mobileNav.classList.toggle('open');
+        menuBtn.textContent = isOpen ? '✕' : '☰';
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+      };
+      mobileNav.querySelectorAll('.mnav-links a, .mnav-cta').forEach(a => a.onclick = () => {
+        mobileNav.classList.remove('open');
+        menuBtn.textContent = '☰';
+        document.body.style.overflow = '';
+      });
+      mobileNav.addEventListener('click', (e) => {
+        if(e.target === mobileNav) {
+          mobileNav.classList.remove('open');
+          menuBtn.textContent = '☰';
+          document.body.style.overflow = '';
+        }
+      });
+    }
+  })();
+</script>
+</body>
+</html>
