@@ -1,0 +1,14 @@
+/* PROKONT ortak kaydırma çubuğu */
+html{scrollbar-width:thin;scrollbar-color:#8ba09d transparent}
+html::-webkit-scrollbar{width:7px;height:7px}
+html::-webkit-scrollbar-track{background:transparent}
+html::-webkit-scrollbar-thumb{background:#9aadaa;border-radius:99px;border:2px solid transparent;background-clip:padding-box}
+html::-webkit-scrollbar-thumb:hover{background:#667d79;border:2px solid transparent;background-clip:padding-box}
+html::-webkit-scrollbar-corner{background:transparent}
+dialog{scrollbar-width:thin;scrollbar-color:#9aadaa transparent}
+dialog::-webkit-scrollbar{width:4px}
+dialog::-webkit-scrollbar-track{background:transparent}
+dialog::-webkit-scrollbar-thumb{background:#7e9692;border:1px solid transparent;background-clip:padding-box}
+
+/* Bir yazı penceresi açıkken arka sayfanın scrollbarını gizle. */
+html:has(dialog[open]),body:has(dialog[open]){overflow:hidden}
