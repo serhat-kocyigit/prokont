@@ -208,23 +208,21 @@ function renderMyList() {
   footer.hidden = false;
 
   items.innerHTML = myList.map((item, i) => `
-    <div class="ws-item" data-index="${i}">
-      <div class="wi-info">
-        <span class="wi-poz">${escapeHtml(item.poz)}</span>
-        <span class="wi-name" title="${escapeHtml(item.ad)}">${escapeHtml(item.ad)}</span>
-        <span class="wi-meta">${escapeHtml(item.birim || '—')} · ${money(item.fiyat)}</span>
+      <div class="ws-item" data-index="${i}">
+        <div class="wi-info">
+          <span class="wi-poz">${escapeHtml(item.poz)}</span>
+          <span class="wi-name" title="${escapeHtml(item.ad)}">${escapeHtml(item.ad)}</span>
+          <span class="wi-meta" style="display:flex; align-items:center; gap:6px;">
+            ${item.miktar} ${escapeHtml(item.birim || '-')} &times; 
+            <input type="number" value="${item.fiyat}" min="0" step="any" onchange="setPrice(${i}, this.value)" title="Birim Fiyatı Değiştir" style="width: 85px; padding: 2px 4px; border: 1px solid #dce6df; border-radius: 4px; font-family: inherit; font-size: 13px; color: #21805d; font-weight: 700; background: #fff; text-align: right;"> TL
+          </span>
+        </div>
+        <div class="wi-right">
+          <span class="wi-subtotal">${money(item.miktar * item.fiyat)}</span>
+          <button class="wi-remove" onclick="removeItem(${i})" title="Kaldır">×</button>
+        </div>
       </div>
-      <div class="wi-qty-group">
-        <button class="wi-qty-btn" onclick="changeQty(${i}, -1)">−</button>
-        <input class="wi-qty-val" type="number" value="${item.miktar}" min="0.01" step="any" onchange="setQty(${i}, this.value)">
-        <button class="wi-qty-btn" onclick="changeQty(${i}, 1)">+</button>
-      </div>
-      <div class="wi-right">
-        <span class="wi-subtotal">${money(item.miktar * item.fiyat)}</span>
-        <button class="wi-remove" onclick="removeItem(${i})" title="Kaldır">✕</button>
-      </div>
-    </div>
-  `).join('');
+    `).join('');
 
   // Totals
   const totalItems = myList.length;
@@ -240,6 +238,16 @@ function changeQty(index, delta) {
   renderMyList();
 }
 
+
+function setPrice(index, val) {
+    if (!myList[index]) return;
+    const v = parseFloat(val);
+    if (!isNaN(v) && v >= 0) {
+      myList[index].fiyat = v;
+    }
+    saveList();
+    renderMyList();
+  }
 function setQty(index, val) {
   if (!myList[index]) return;
   const v = parseFloat(val);
