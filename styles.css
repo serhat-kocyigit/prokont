@@ -199,3 +199,6 @@ a, button, [role="button"], input[type="submit"], input[type="button"] { cursor:
 .centre-cta p:not(.eyebrow) { max-width:620px; margin:16px auto 24px; color:var(--muted); line-height:1.65; }
 @media(max-width:800px) { .page-links { grid-template-columns:repeat(2,1fr); } .page-links a:nth-child(4n) { border-right:1px solid var(--line); } .page-links a:nth-child(2n) { border-right:0; } .page-links a:nth-last-child(-n+4) { border-bottom:1px solid var(--line); } .page-links a:nth-last-child(-n+2) { border-bottom:0; } }
 @media(max-width:500px) { .page-hub { padding:46px 0; } .page-links { grid-template-columns:1fr; } .page-links a, .page-links a:nth-child(4n), .page-links a:nth-child(2n) { min-height:0; border-right:0; border-bottom:1px solid var(--line); } .page-links a:last-child { border-bottom:0; } }
+
+.nav .brand img, header .brand img { width: 60px; height: auto; }
+
