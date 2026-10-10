@@ -1,10 +1,16 @@
 <!doctype html>
-<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PROKONT | Poz Listesi</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="poz.css"></head><body>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PROKONT | Poz Listesi</title>
+<meta name="description" content="2026 resmi poz ve birim fiyat listesi. Arama yapın, listeye ekleyin, Excel olarak indirin.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="poz.css">
+</head><body>
 <header id="top">
   <div class="shell nav">
     <a class="brand" href="index.html">
       <img src="prokont-logo.png" alt="PROKONT">
-      <span>PROKONT<small>MÜHENDİSLİK & İNŞAAT</small></span>
+      <span>PROKONT<small>MÜHENDİSLİK &amp; İNŞAAT</small></span>
     </a>
     <nav>
       <a href="index.html">Ana Sayfa</a>
@@ -36,7 +42,7 @@
           <img src="prokont-logo.png" alt="PROKONT" class="mnav-logo">
           <div>
             <strong>PROKONT Mühendislik</strong>
-            <span>İnşaat & Taahhüt</span>
+            <span>İnşaat &amp; Taahhüt</span>
           </div>
         </div>
         <div class="mnav-location">
@@ -64,9 +70,168 @@
     </div>
   </div>
 </header>
-<main><section class="poz-hero"><div class="shell"><p class="eyebrow light">— 2026 POZ VE BİRİM FİYAT ARAMA</p><div class="hero-copy"><div><h1>Aradığınız imalat<br><em>bir aramada karşınızda.</em></h1><p>Poz numarası, imalat adı veya kategoriyle arayın. Sonucu doğrudan hesaplama çalışma alanına aktarın.</p></div><div class="hero-stat"><b id="pozCount">0</b><span>aranabilir kalem</span><small>Malzeme · İşçilik · Diğer gider</small></div></div><div class="search-panel"><span>⌕</span><input id="pozSearch" autofocus placeholder="Örn. 15.540, seramik, boru, işçilik..."><button id="clearSearch" hidden>Temizle</button></div><div class="suggestions"><span>Hızlı arama:</span><button>Seramik</button><button>Yalıtım</button><button>Beton</button><button>Elektrik</button><button>İşçilik</button></div></div></section>
-<section class="poz-content"><div class="shell"><div class="poz-layout"><aside class="filters"><div class="filter-title"><b>Filtreler</b><button id="resetFilters">Sıfırla</button></div><label>Kategori<select id="category"><option value="all">Tüm kategoriler</option></select></label><label>Kalem türü<select id="type"><option value="all">Tüm türler</option></select></label><div class="filter-note"><b>Nasıl çalışır?</b><p>Her kaydın ait olduğu resmî bölüm/kategori gösterilir. Bir kalemi seçtiğinizde hesaplama alanı açılır.</p></div></aside><div class="poz-results"><div class="results-top"><div><small>2026 RESMÎ POZ LİSTESİ</small><h2><span id="resultCount">0</span> kalem bulundu</h2></div><div class="view-info">ÇŞİDB Yüksek Fen Kurulu · 2026</div></div><div class="table-head"><span>Poz no / imalat / kategori</span><span>Birim</span><span>Tür</span><span>Birim fiyat</span><span></span></div><div id="pozRows"></div><p id="resultNote" class="result-note"></p><div id="empty" hidden><b>Sonuç bulunamadı</b><p>Farklı bir poz numarası veya imalat adı deneyin.</p></div></div></div></div></section>
-<section class="poz-cta"><div class="shell"><div><p class="eyebrow light">— PROJE BÜTÇENİZİ NETLEŞTİRİN</p><h2>Bir pozdan daha fazlasına mı ihtiyacınız var?</h2></div><a href="index.html#tools" class="btn orange">Hesaplama merkezine git →</a></div></section></main><footer><div class="shell copy">© 2026 PROKONT Mühendislik & İnşaat Ltd. Şti. <span>Hesaplamalar yaklaşık maliyetlerdir.</span></div></footer><script src="poz-listesi.js"></script><script>
+
+<main>
+  <!-- Hero -->
+  <section class="poz-hero">
+    <div class="shell">
+      <p class="eyebrow light">— 2026 POZ LİSTESİ &amp; EXCEL ÇIKTI</p>
+      <div class="hero-copy">
+        <div>
+          <h1>Poz seçin, listeleyin,<br><em>Excel olarak indirin.</em></h1>
+          <p>Resmi 2026 birim fiyat listesinden arama yapın, ihtiyacınız olan kalemleri miktar girerek çalışma listenize ekleyin. Hazır olunca tek tıkla Excel dosyası olarak indirin.</p>
+        </div>
+        <div class="hero-stat">
+          <b id="pozCount">0</b>
+          <span>aranabilir kalem</span>
+          <small>ÇŞİDB Yüksek Fen Kurulu · 2026</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Workspace -->
+  <section class="poz-workspace">
+    <div class="shell">
+      <div class="workspace-layout">
+
+        <!-- LEFT: Search & Browse -->
+        <div class="ws-search-panel">
+          <div class="ws-panel-header">
+            <div><h2>Listeye kalem ekle</h2><p class="ws-panel-help">İmalat adını veya poz numarasını yazın.</p></div>
+            <button id="addCustomItem" class="ws-btn-custom" title="Resmi listede olmayan bir kalem ekle">+ Özel kalem</button>
+          </div>
+
+          <div class="ws-search-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="pozSearch" autofocus placeholder="Poz no, imalat adı veya kategori ara...">
+            <button id="clearSearch" class="ws-clear" hidden>✕</button>
+          </div>
+
+          <details class="ws-filter-details">
+            <summary>Filtreleri göster</summary>
+            <div class="ws-filters">
+              <select id="category"><option value="all">Tüm kategoriler</option></select>
+              <select id="type"><option value="all">Tüm türler</option></select>
+              <button id="resetFilters" class="ws-reset">Temizle</button>
+            </div>
+            <div class="ws-quick-tags">
+              <button>Seramik</button><button>Yalıtım</button><button>Beton</button><button>Elektrik</button><button>İşçilik</button>
+            </div>
+          </details>
+
+          <div class="ws-results" id="pozRows"></div>
+
+          <div id="empty" class="ws-empty" hidden>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#b0c4b8" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M8 11h6"/></svg>
+            <b>Sonuç bulunamadı</b>
+            <p>Farklı bir poz numarası veya imalat adı deneyin.</p>
+          </div>
+
+          <p id="resultNote" class="ws-result-note"></p>
+        </div>
+
+        <!-- RIGHT: My List -->
+        <details class="ws-my-list" id="myListDetails">
+          <summary class="ws-list-summary"><span>Çalışma listem <b id="listItemCount">0</b></span><small>Göster</small></summary>
+          <div class="ws-list-content">
+          <div class="ws-panel-header">
+            <h2>Çalışma Listem</h2>
+            <div class="ws-list-actions">
+              <button id="clearList" class="ws-btn-ghost" title="Listeyi temizle">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                Temizle
+              </button>
+              <button id="exportPdf" class="ws-btn-export" title="PDF olarak indir">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                PDF İndir
+              </button>
+            </div>
+          </div>
+
+          <div id="myListEmpty" class="ws-list-empty">
+            <div class="ws-list-empty-icon">
+              <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#c8d8d4" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+            </div>
+            <b>Listeniz boş</b>
+            <p>Soldaki aramadan resmi bir poz seçin<br>veya özel bir kalem ekleyin.</p>
+          </div>
+
+          <div id="myListItems" class="ws-list-items"></div>
+
+          <div id="myListFooter" class="ws-list-footer" hidden>
+            <div class="ws-total-row">
+              <span>Toplam Kalem</span>
+              <b id="totalItems">0</b>
+            </div>
+            <div class="ws-total-row ws-grand-total">
+              <span>Genel Toplam</span>
+              <b id="grandTotal">0,00 TL</b>
+            </div>
+          </div>
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="poz-cta">
+    <div class="shell">
+      <div>
+        <p class="eyebrow light">— PROJE BÜTÇENİZİ NETLEŞTİRİN</p>
+        <h2>Detaylı maliyet analizi mi gerekiyor?</h2>
+      </div>
+      <a href="index.html#tools" class="btn orange">Hesaplama merkezine git →</a>
+    </div>
+  </section>
+</main>
+
+<footer><div class="shell copy">© 2026 PROKONT Mühendislik &amp; İnşaat Ltd. Şti. <span>Hesaplamalar yaklaşık maliyetlerdir.</span></div></footer>
+
+<!-- Miktar Dialogu -->
+<div id="qtyModal" class="qty-modal">
+  <div class="qty-modal-content">
+    <button id="qtyClose" class="qty-modal-close">✕</button>
+    <h3 id="qtyTitle">Kalem Ekle</h3>
+    <p id="qtyPozNo" class="qty-poz-no"></p>
+    <div class="qty-info-row">
+      <span id="qtyUnit">—</span>
+      <span id="qtyPrice">—</span>
+    </div>
+    <label class="qty-label">
+      Miktar
+      <input id="qtyInput" type="number" min="0.01" step="any" placeholder="Örn: 100" autofocus>
+    </label>
+    <div class="qty-subtotal">
+      Ara Toplam: <b id="qtySubtotal">0,00 TL</b>
+    </div>
+    <button id="qtyAdd" class="ws-btn-export qty-add-btn">Listeye Ekle</button>
+  </div>
+</div>
+
+<!-- Özel kalem dialogu -->
+<div id="customItemModal" class="qty-modal" aria-hidden="true">
+  <div class="qty-modal-content custom-item-content" role="dialog" aria-modal="true" aria-labelledby="customItemTitle">
+    <button id="customItemClose" class="qty-modal-close" aria-label="Kapat">✕</button>
+    <h3 id="customItemTitle">Özel kalem ekle</h3>
+    <p class="qty-poz-no">Resmi poz listesinde yer almayan işler için</p>
+    <div class="custom-item-grid">
+      <label class="qty-label full">Kalem adı <input id="customName" type="text" maxlength="120" placeholder="Örn: Şantiye temizliği"></label>
+      <label class="qty-label">Birim <input id="customUnit" type="text" maxlength="20" value="adet" placeholder="adet, m²..."></label>
+      <label class="qty-label">Miktar <input id="customQty" type="number" min="0.01" step="any" value="1"></label>
+      <label class="qty-label">Birim fiyat (TL) <input id="customPrice" type="number" min="0" step="any" value="0"></label>
+      <label class="qty-label">Poz no <small>İsteğe bağlı</small><input id="customPoz" type="text" maxlength="40" placeholder="Örn: ÖZ-01"></label>
+    </div>
+    <div class="qty-subtotal">Ara Toplam: <b id="customSubtotal">0,00 TL</b></div>
+    <button id="customItemAdd" class="ws-btn-export qty-add-btn">Listeye Ekle</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="poz-listesi.js"></script>
+<script>
   (function(){
     const menuBtn = document.getElementById('menu');
     const mobileNav = document.getElementById('mobileNav');

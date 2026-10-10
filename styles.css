@@ -184,3 +184,18 @@ a, button, [role="button"], input[type="submit"], input[type="button"] { cursor:
   .p-logo.large { width: auto; height: 60px; max-width: 180px; }
 }
 .foot .brand img { filter: none; }
+
+/* Ana sayfa: arama yerine doğrudan yönlendirme */
+.page-hub { padding:62px 0; background:#fff; }
+.page-hub h2 { margin-bottom:26px; }
+.page-links { display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--line); }
+.page-links a { min-height:112px; padding:20px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); color:var(--navy); text-decoration:none; display:flex; flex-direction:column; gap:8px; transition:.18s; }
+.page-links a:hover { background:#eff7f1; }
+.page-links a:nth-child(4n) { border-right:0; }
+.page-links a:nth-last-child(-n+4) { border-bottom:0; }
+.page-links b { font:800 17px var(--serif); }
+.page-links span { color:var(--green); font-size:12px; font-weight:700; }
+.centre-cta { max-width:760px; text-align:center; }
+.centre-cta p:not(.eyebrow) { max-width:620px; margin:16px auto 24px; color:var(--muted); line-height:1.65; }
+@media(max-width:800px) { .page-links { grid-template-columns:repeat(2,1fr); } .page-links a:nth-child(4n) { border-right:1px solid var(--line); } .page-links a:nth-child(2n) { border-right:0; } .page-links a:nth-last-child(-n+4) { border-bottom:1px solid var(--line); } .page-links a:nth-last-child(-n+2) { border-bottom:0; } }
+@media(max-width:500px) { .page-hub { padding:46px 0; } .page-links { grid-template-columns:1fr; } .page-links a, .page-links a:nth-child(4n), .page-links a:nth-child(2n) { min-height:0; border-right:0; border-bottom:1px solid var(--line); } .page-links a:last-child { border-bottom:0; } }
