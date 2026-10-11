@@ -1,0 +1,7 @@
+.git
+.env
+node_modules
+dist
+tmp_pdf_preview
+site-deploy.tar.gz
+site-images-fixed.tar.gz
