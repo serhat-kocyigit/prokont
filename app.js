@@ -142,8 +142,8 @@ if($('#offerForm')) $('#offerForm').onsubmit = async e => {
     msg += '\n📎 *Seçilen Dosya:* ' + attachment.name + '\n';
   }
 
-  const testPhone = '905447414393';
-  const waUrl = 'https://wa.me/' + testPhone + '?text=' + encodeURIComponent(msg);
+  const targetPhone = '905436192262';
+  const waUrl = 'https://wa.me/' + targetPhone + '?text=' + encodeURIComponent(msg);
 
   window.open(waUrl, '_blank');
   $('#dialog')?.close();
@@ -152,7 +152,7 @@ if($('#offerForm')) $('#offerForm').onsubmit = async e => {
     submitBtn.innerHTML = originalBtnHTML;
   }
   toast(fileUrl ? 'Belgeniz yüklendi ve WhatsApp aktarıldı!' : 'Teklif talebiniz WhatsApp\'a aktarılıyor...');
-  analytics('offer_request_whatsapp', { testPhone: testPhone, hasFile: !!fileUrl });
+  analytics('offer_request_whatsapp', { phone: targetPhone, hasFile: !!fileUrl });
 };
 
 const requested=external?.name?'harici':localStorage.getItem('prokontRequestedTool'); if(requested&&tools[requested]){localStorage.removeItem('prokontRequestedTool');workspace(requested);setTimeout(()=>$('#calculator')?.scrollIntoView({behavior:'smooth',block:'start'}),80);}else{ if($('#calculator')) workspace(); } }
