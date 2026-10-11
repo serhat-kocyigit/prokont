@@ -59,8 +59,91 @@ function init(){ const external=JSON.parse(localStorage.getItem('prokontExternal
 
 
 if($('#offerBtn')) $('#offerBtn').onclick=()=>openOffer(); 
-if($('#close')) $('#close').onclick=()=>$('#dialog')?.close(); 
-if($('#offerForm')) $('#offerForm').onsubmit=e=>{e.preventDefault();$('#dialog')?.close();toast('Talebiniz alındı. Hesap özeti talebe eklendi.');analytics('offer_request');}; 
+if($('#close')) $('#close').onclick=()=>$('#dialog')?.close();
+const modalDlg = $('#dialog');
+if(modalDlg) {
+  modalDlg.addEventListener('click', (e) => {
+    const rect = modalDlg.getBoundingClientRect();
+    if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) {
+      modalDlg.close();
+    }
+  });
+}
+const attInput = $('#attachment');
+if(attInput) {
+  attInput.onchange = () => {
+    if(attInput.files && attInput.files[0]) {
+      const f = attInput.files[0];
+      const t = $('#fileTitle'); if(t) t.textContent = f.name;
+      const h = $('#fileHint'); if(h) h.textContent = (f.size / 1024 / 1024).toFixed(2) + ' MB · Dosya seçildi';
+    }
+  };
+} 
+if($('#offerForm')) $('#offerForm').onsubmit = async e => {
+  e.preventDefault();
+  const submitBtn = $('#offerForm button[type="submit"]');
+  const originalBtnHTML = submitBtn ? submitBtn.innerHTML : '';
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span>Belge Yükleniyor...</span>';
+  }
+
+  const name = ($('#nameInput')?.value || '').trim();
+  const phone = ($('#phoneInput')?.value || '').trim();
+  const city = ($('#city')?.value || '').trim();
+  const notes = ($('#offerNotes')?.value || '').trim();
+  const attachment = $('#attachment')?.files?.[0];
+
+  let fileUrl = '';
+  if (attachment) {
+    try {
+      const base64Data = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(attachment);
+      });
+      const uploadRes = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: attachment.name, data: base64Data })
+      });
+      if (uploadRes.ok) {
+        const fileJson = await uploadRes.json();
+        fileUrl = location.origin + '/' + fileJson.url;
+      }
+    } catch (err) {
+      console.warn('Dosya sunucuya yüklenemedi:', err);
+    }
+  }
+
+  let msg = '🏗️ *PROKONT - Yeni Teklif Talebi*\n\n';
+  msg += '👤 *İsim:* ' + (name || 'Belirtilmedi') + '\n';
+  msg += '📞 *Telefon:* ' + (phone || 'Belirtilmedi') + '\n';
+  msg += '📍 *Konum:* ' + (city || 'Belirtilmedi') + '\n';
+  if (notes) {
+    msg += '📝 *Proje Notu:*\n' + notes + '\n';
+  }
+  if (fileUrl) {
+    // WhatsApp'ın linki tam tanıması için etrafında boş satır olmalıdır
+    msg += '\n📎 *Yüklenen Proje Dosyası Linki:*\n\n' + fileUrl + '\n\n';
+  } else if (attachment) {
+    msg += '\n📎 *Seçilen Dosya:* ' + attachment.name + '\n';
+  }
+
+  const testPhone = '905447414393';
+  const waUrl = 'https://wa.me/' + testPhone + '?text=' + encodeURIComponent(msg);
+
+  window.open(waUrl, '_blank');
+  $('#dialog')?.close();
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalBtnHTML;
+  }
+  toast(fileUrl ? 'Belgeniz yüklendi ve WhatsApp aktarıldı!' : 'Teklif talebiniz WhatsApp\'a aktarılıyor...');
+  analytics('offer_request_whatsapp', { testPhone: testPhone, hasFile: !!fileUrl });
+};
+
 const requested=external?.name?'harici':localStorage.getItem('prokontRequestedTool'); if(requested&&tools[requested]){localStorage.removeItem('prokontRequestedTool');workspace(requested);setTimeout(()=>$('#calculator')?.scrollIntoView({behavior:'smooth',block:'start'}),80);}else{ if($('#calculator')) workspace(); } }
 init();
 
