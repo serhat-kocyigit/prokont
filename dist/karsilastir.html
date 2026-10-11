@@ -799,27 +799,6 @@
       transform: translateY(-2px);
       box-shadow: 0 10px 26px rgba(16,43,58,0.26);
     }
-    .dict-load-all-btn {
-      background: #ffffff;
-      color: var(--text);
-      font: 700 13.5px var(--sans);
-      padding: 13px 26px;
-      border-radius: 30px;
-      border: 1.5px solid #d3e2db;
-      cursor: pointer;
-      transition: all .2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 2px 6px rgba(16,43,58,0.04);
-    }
-    .dict-load-all-btn:hover {
-      background: #eef7f2;
-      border-color: var(--green);
-      color: var(--green);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(33,128,93,0.14);
-    }
 
     @media(max-width: 768px) {
       .dict-section { padding: 45px 0 60px; }
@@ -1002,7 +981,7 @@
         width: 100%;
         gap: 10px;
       }
-      .dict-load-more-btn, .dict-load-all-btn {
+      .dict-load-more-btn {
         width: 100%;
         justify-content: center;
         padding: 12px 20px;
@@ -1258,9 +1237,6 @@
       <div class="dict-load-actions">
         <button class="dict-load-more-btn" id="dictLoadMoreBtn">
           <span>↓ Daha Fazla Terim Göster (+36)</span>
-        </button>
-        <button class="dict-load-all-btn" id="dictLoadAllBtn">
-          <span>⚡ Tümünü Listele (209)</span>
         </button>
       </div>
     </div>
@@ -1578,7 +1554,6 @@ function renderDictCards() {
   const resultInfoEl = document.getElementById('dictResultCount');
   const loadMoreWrap = document.getElementById('dictLoadMoreWrap');
   const loadMoreBtn = document.getElementById('dictLoadMoreBtn');
-  const loadAllBtn = document.getElementById('dictLoadAllBtn');
   const progressText = document.getElementById('dictProgressText');
   const progressBar = document.getElementById('dictProgressBarFill');
   if (!grid || typeof dictData === 'undefined') return;
@@ -1606,7 +1581,6 @@ function renderDictCards() {
       const remaining = totalFound - currentDisplayLimit;
       const nextBatch = Math.min(BATCH_SIZE, remaining);
       if (loadMoreBtn) loadMoreBtn.innerHTML = `<span>↓ Daha Fazla Terim Göster (+${nextBatch})</span>`;
-      if (loadAllBtn) loadAllBtn.innerHTML = `<span>⚡ Tümünü Listele (${totalFound})</span>`;
       if (progressText) progressText.textContent = `${totalFound} terimden ${displayed.length} tanesi listeleniyor (${remaining} terim kaldı)`;
       if (progressBar) progressBar.style.width = `${Math.round((displayed.length / totalFound) * 100)}%`;
     } else {
@@ -1716,13 +1690,6 @@ if (loadMoreBtn) {
   });
 }
 
-const loadAllBtn = document.getElementById('dictLoadAllBtn');
-if (loadAllBtn) {
-  loadAllBtn.addEventListener('click', () => {
-    currentDisplayLimit = 9999;
-    renderDictCards();
-  });
-}
 
 // Toplam terim sayısını göster
 const statTotal = document.getElementById('statTotalTerms');
