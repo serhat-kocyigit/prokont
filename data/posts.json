@@ -125,7 +125,7 @@
     "category": "İNŞAAT",
     "excerpt": "Metrajın keşif, teklif ve malzeme siparişindeki rolünü adım adım öğrenin.",
     "content": "Metraj, bir yapının veya tadilat projesinin kağıt üzerindeki projeden sahaya aktarılmasında gereken tüm uzunluk, alan, hacim ve adetlerin matematiksel olarak hesaplanmasıdır. Doğru metraj; malzeme israfını önler, bütçe sapmalarını engeller ve taşeronlarla şeffaf çalışmanın temelini oluşturur.\n\n1. Metraj Türleri Nelerdir?\n- Keşif (Ön) Metrajı: Proje başında yaklaşık maliyeti belirlemek ve bütçe planlamak için yapılır.\n- Uygulama Metrajı: Şantiyede siparişlerin verilmesi ve günlük iş programının hazırlanması için kullanılır.\n- Kesin Hesap (Hakediş) Metrajı: İmalat bittikten sonra yerinde yapılan nihai ölçümlerdir.\n\n2. Metraj Cetveli ve Standart Birimler\nİnşaatta her kalemin standart bir ölçü birimi vardır:\n- Kazı, beton, hafriyat: Metreküp (m³)\n- Sıva, boya, seramik, şap, kalıp, yalıtım: Metrekare (m²)\n- Demir, çelik, profil: Kilogram veya Ton (kg / ton)\n- Süpürgelik, boru, kablo, bordür: Metretül (mt)\n- Kapı, pencere, armatür, anahtar-priz: Adet\n\n3. Minha (Boşluk Düşme) Kuralları\nMetraj yaparken en sık yapılan hata duvar boşluklarının unutulmasıdır. Duvar veya sıva metrajı çıkarılırken kapı ve pencere boşlukları toplam alandan mutlaka düşülmelidir (minha edilmelidir). Ancak Çevre ve Şehircilik Bakanlığı poz tanımlarına göre küçük boşluklar (örneğin 1 m²'den küçük delikler) işçilik zorluğu sebebiyle düşülmeyebilir.\n\n4. Fire Oranlarının Hesaba Katılması\nHiçbir malzeme sıfır kayıpla uygulanamaz. Köşe kesimleri, kırılmalar ve nakliye zayiatı için seramikte %7-10, parkede %5-7, demirde %3-5 fire payı eklenmelidir.\n\nPROKONT Akıllı Planlayıcı üzerinden projenizin metrajlarını girdiğinizde, resmi 2026 birim fiyatlarıyla otomatik keşif özeti çıkarabilir ve sürpriz maliyetleri sıfıra indirebilirsiniz.",
-    "image": "assets/blog-covers/kesif-maliyet.png",
+    "image": "assets/blog_metraj_kesif.jpg",
     "date": "01 Kasım 2026",
     "tags": "metraj, kesif, insaat, maliyet"
   },
@@ -145,7 +145,7 @@
     "category": "İNŞAAT",
     "excerpt": "C25/30, C30/37 ve daha yüksek sınıfların kullanım amacı proje kararına bağlıdır.",
     "content": "Beton, modern yapıların omurgasıdır. Bir yapının deprem güvenliği, dayanıklılığı ve taşıma kapasitesi doğrudan doğruya seçilen beton sınıfına ve yerleştirme kalitesine bağlıdır.\n\n1. Beton Sınıfları Ne Anlama Gelir?\nC20, C25, C30, C35 gibi sınıflardaki 'C' harfi Concrete (Beton), yanındaki rakam ise standart silindir numunenin 28 günlük basınç dayanımını (MPa cinsinden) ifade eder. Örneğin C30 betonu, 1 santimetrekaresinde yaklaşık 300 kg yük taşıma kapasitesine sahiptir.\n\n2. Türkiye Bina Deprem Yönetmeliği Şartları\nGüncel deprem yönetmeliğimize göre yeni yapılacak binalarda taşıyıcı sistem için ASGARİ beton sınıfı C25/30'dur. Deprem riski yüksek bölgelerde ve nitelikli konut projelerinde C30 ve C35 beton sınıfları standart hale gelmiştir.\n\n3. Şantiyede Yapılan En Büyük Hata: 'Su Katmak'\nTransmikser şantiyeye geldiğinde betonun kıvamı koyu görünebilir. Pompa operatörlerinin veya beton işçilerinin betonu daha kolay yaymak için miksere fazladan su eklemesi betonun mukavemetini %40'a varan oranda öldürür. Betona asla harici su katılmamalı, akışkanlık gerekiyorsa süper akışkanlaştırıcı kimyasal katkılar kullanılmalıdır.\n\n4. Kürleme (Sulama) ve Bakımın Önemi\nBeton döküldükten sonra hidratasyon ısısı üretir. İlk 7 gün boyunca sabah ve akşam düzenli sulanmalı, sıcak havalarda buharlaşmayı önlemek için kür katkısı veya ıslak çuvallarla örtülmelidir. Bakımı yapılmayan C35 beton, sulanmış C25 betondan daha zayıf kalabilir.",
-    "image": "assets/blog_insaat.jpg",
+    "image": "assets/blog_beton_dokumu.jpg",
     "date": "05 Kasım 2026",
     "tags": "beton, betonarme, c2530, santiye"
   },
@@ -155,7 +155,7 @@
     "category": "ZEMİN",
     "excerpt": "Zemin hazırlığı, derz ve kuruma süresi şap performansını belirler.",
     "content": "Zemin kaplamaları (laminat parke, seramik, mermer) ne kadar kaliteli olursa olsun, altındaki şap düzgün değilse çatlamalar, kabarmalar ve gıcırtılar kaçınılmazdır. Şapın çatlamasını önlemek için şu 6 kurala mutlaka uyun:\n\n1. Su-Çimento Oranını Düşük Tutun\nŞap harcını çamur gibi sulu hazırlamak ustaların işini kolaylaştırır ama kururken suyun buharlaşmasıyla harç büzüşür ve derin 'rötre çatlakları' oluşturur. Şap harcı nemli toprak kıvamında (yarı kuru şap) olmalıdır.\n\n2. Polipropilen Elyaf Katkısı Kullanın\nŞap harcına katılan sentetik elyaf lifleri, harcın içinde milyonlarca mikro köprü kurarak mikro düzeydeki gerilmeleri karşılar ve çatlamayı %80 oranında engeller.\n\n3. Çevre Bandı (Fuga) ile Duvarlardan Ayırın\nŞap dökülmeden önce tüm duvar diplerine 5-8 mm kalınlığında polietilen şilte şeritleri çekilmelidir. Şapın duvarlara yapışması engellenmeli, zemin yüzer halde çalışmalıdır.\n\n4. Genleşme Derzlerini (Derz Kesimi) Unutmayın\nGeniş alanlarda (25 m²'yi aşan odalar veya kapı eşikleri) şap döküldükten sonraki gün derz kesme makinesiyle kalınlığın üçte biri kadar genleşme derzleri açılmalıdır.\n\n5. Minimum Kalınlık Sınırına Dikkat Edin\nYalıtım şiltesi veya strafor üzerine yapılan yüzer şaplarda kalınlık en az 4-5 cm olmalıdır. 3 cm'nin altındaki şaplar üzerine basıldığında kırılır.\n\n6. Hızlı Kurumaya Karşı Koruyun ve Sulayın\nŞap döküldükten sonra kapı ve pencereler kapalı tutularak ceryan yapması engellenmelidir. İlk 3 gün hafifçe nemlendirilerek çatlaması önlenmelidir.",
-    "image": "assets/blog_parke.jpg",
+    "image": "assets/blog_sap_uygulamasi.jpg",
     "date": "07 Kasım 2026",
     "tags": "sap, zemin, seramik, parke"
   },
@@ -185,7 +185,7 @@
     "category": "SERAMİK",
     "excerpt": "Doğru derz seçimi hem görünümü hem de kaplamanın uzun ömürlü olmasını sağlar.",
     "content": "Fayans ve seramik uygulamalarında görsel sonucu belirleyen en kritik son dokunuş derz dolgusudur. Yanlış derz rengi en pahalı seramiği bile basit gösterirken, doğru seçim mekana lüks bir hava katar.\n\n1. Rektifiye (Lazer Kesim) Seramiklerde Derz Genişliği\nKenarları 90 derece dik kesilmiş rektifiye seramiklerde sıfır derz yapılmamalıdır. Isı farklarından dolayı seramiklerin genleşebilmesi için en az 1 mm ila 1.5 mm derz payı bırakılmalıdır. Standart pahlı seramiklerde ise 2 mm - 3 mm idealdir.\n\n2. Ton-sür-Ton (Bütüncül) Renk Seçimi\nMekanın daha geniş, ferah ve kesintisiz görünmesini istiyorsanız seramik rengine en yakın derz dolgusunu seçmelisiniz. Özellikle mermer desenli açık renk seramiklerde beyaz, bej veya açık gri derzler mükemmel bir akış sağlar.\n\n3. Kontrast (Grafik) Etki\nBeyaz metro seramikler (subway tiles) arasına antrasit veya siyah derz uygulamak vintage ve loft tarzı mekanlarda çok popülerdir. Ancak koyu derz uygulamasında ustalık çok hassas olmalıdır; en ufak çizgi kayması hemen göze batar.\n\n4. Islak Hacimlerde Epoksi Derz Çözümü\nBanyo, duş içi ve mutfak tezgah aralarında çimento esaslı standart derzler zamanla su emerek kararır ve küflenir. Epoksi esaslı derz dolgular su geçirmez, leke tutmaz ve kimyasallara dayanıklıdır; yıllarca ilk günkü rengini korur.",
-    "image": "assets/blog_seramik.jpg",
+    "image": "assets/blog_derz_dolgu.jpg",
     "date": "13 Kasım 2026",
     "tags": "seramik, derz, banyo, kaplama"
   },
@@ -195,7 +195,7 @@
     "category": "TADİLAT",
     "excerpt": "Nem, küf ve kabaran boyayı azaltmak için banyoda doğru hava akışı gerekir.",
     "content": "Banyo tadilatlarında su yalıtımına büyük paralar harcanırken havalandırma çoğu zaman unutulur. Oysa yetersiz havalandırma, en iyi su yalıtımını bile birkaç yılda etkisiz hale getirebilir.\n\n1. Buharın Duvarlara ve Mobilyalara Zararı\nSıcak bir duş alındığında banyodaki bağıl nem oranı %90'ın üzerine çıkar. Dışarı tahliye edilemeyen su buharı soğuk yüzeylere (fayans, ayna, tavan) çarparak yoğuşur. Bu durum banyo dolaplarının kabarmasına, kapıların şişmesine ve tavan boyasının pul pul dökülmesine yol açar.\n\n2. Küf ve Siyah Bakteri Oluşumu\nSürekli nemli kalan ortamlarda silikon kenarlarında ve derz dolgu aralarında siyah küf mantarları ürer. Bu mantarlar sadece kötü görüntüye sebep olmakla kalmaz, solunum yolu hastalıklarına ve alerjilere zemin hazırlar.\n\n3. Mekanik Havalandırma Fanı (Aspiratör) Seçimi\nPenceresiz banyolarda standart menfezler yeterli çekişi sağlayamaz. Geri tepme ventilli (binanın baca kokusunu içeri almayan), zaman ayarlı (banyodan çıktıktan sonra 5-10 dakika daha çalışan) ve sessiz çalışan bir elektrikli aspiratör takılmalıdır.\n\n4. Kapı Altı Hava Boşluğu\nHavalandırma fanının verimli çekebilmesi için banyoya taze hava girmesi gerekir. Banyo kapısının altında en az 1.5 - 2 cm hava boşluğu veya kapı altı havalandırma ızgarası bırakılmalıdır.",
-    "image": "assets/blog_suyalitimi.jpg",
+    "image": "assets/blog_banyo_havalandirma.jpg",
     "date": "15 Kasım 2026",
     "tags": "banyo, havalandirma, nem, tadilat"
   },
@@ -225,7 +225,7 @@
     "category": "ZEMİN",
     "excerpt": "Nem bariyeri, derz boşluğu ve doğru ürün sınıfı parke ömrünü uzatır.",
     "content": "Laminat parke, evlerde en çok tercih edilen zemin kaplaması olsa da suya maruz kaldığında hızlıca şişip deforme olmasıyla bilinir. Parkenin su karşısındaki davranışını anlamak ve doğru müdahale etmek zemini kurtarabilir.\n\n1. Laminat Parkenin Anatomisi\nLaminat parkenin taşıyıcı gövdesi HDF (High Density Fiberboard), yani yüksek yoğunlukta preslenmiş ahşap liflerinden oluşur. Ahşap lifleri doğası gereği higroskopiktir (nemi çeker). Su, parke ek yerlerinden (kilitlerden) içeri sızdığında HDF sünger gibi suyu emer ve genleşir.\n\n2. Ek Yerlerindeki Şişme Neden Kalıcı Olur?\nSu emen ahşap lifleri şiştiğinde üstteki melamin koruyucu katmanı yukarı doğru iter. Kuruduktan sonra bile lifler eski orijinal preslenmiş formuna dönemez ve ek yerleri kabarık, sivri bir halde kalır.\n\n3. Su Temasında İlk 15 Dakika Kuralı\nYere su döküldüğünde hemen kuru bir bezle emdirilmeli, paspas sonrası zemin ıslak bırakılmamalıdır. Büyük su baskınlarında ise süpürgelikler hemen sökülmeli, parkelerin altındaki şiltenin hava alması sağlanmalıdır.\n\n4. Suya Dayanıklı (AquaStop) Parkeler Çözüm mü?\nYeni nesil hidrofobik reçineli HDF paneller ve kilitlerine parafin/balmumu çekilmiş suya dayanıklı parkeler, 24 ila 72 saate kadar yüzeydeki suya direnç gösterir. Mutfak ve koridor gibi ıslak hacim yakınlarında bu modeller tercih edilmelidir.",
-    "image": "assets/blog_parke.jpg",
+    "image": "assets/blog_parke_kabarma.jpg",
     "date": "21 Kasım 2026",
     "tags": "laminat, parke, zemin, nem"
   },
