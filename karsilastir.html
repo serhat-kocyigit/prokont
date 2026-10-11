@@ -822,17 +822,213 @@
     }
 
     @media(max-width: 768px) {
-      .dict-grid { grid-template-columns: 1fr; }
-      .dict-banner-cta { flex-direction: column; text-align: center; padding: 30px 20px; }
-      .dict-banner-cta .cta-actions { flex-direction: column; width: 100%; }
-      .dict-banner-cta .dict-btn-white, .dict-banner-cta .btn { width: 100%; justify-content: center; text-align: center; }
-      .dict-header-wrap h2 { font-size: 28px; }
-      .dict-toolbar { padding: 20px 16px; }
-      .dict-stats-bar { flex-direction: column; gap: 8px; border-radius: 16px; }
+      .dict-section { padding: 45px 0 60px; }
+      .dict-header-wrap { margin-bottom: 24px; text-align: center; }
+      .dict-header-wrap h2 { font-size: 26px; line-height: 1.25; }
+      .dict-header-wrap p { font-size: 13.5px; line-height: 1.5; margin: 0 auto 16px; }
+      
+      /* İstatistik Çubuğu: 3 sütunlu kompakt mini kart */
+      .dict-stats-bar {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        padding: 10px 12px;
+        border-radius: 14px;
+        margin-top: 14px;
+      }
+      .dict-stat-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 2px;
+        font-size: 11px;
+      }
+      .dict-stat-item strong {
+        font-size: 13px;
+        color: var(--navy);
+      }
       .dict-stat-sep { display: none; }
-      .dict-letter-btn { min-width: 29px; height: 29px; font-size: 11px; padding: 0 5px; }
-      .dict-load-actions { flex-direction: column; width: 100%; }
-      .dict-load-more-btn, .dict-load-all-btn { width: 100%; justify-content: center; }
+
+      /* Toolbar: kompakt padding */
+      .dict-toolbar {
+        padding: 16px 14px;
+        border-radius: 18px;
+        margin-bottom: 20px;
+      }
+      .dict-search-wrapper { margin-bottom: 14px; }
+      
+      /* Arama Kutusu: Tam genişlik, rozeti akıllı küçült */
+      .dict-search-card {
+        padding: 4px 10px;
+        border-radius: 14px;
+      }
+      .dict-search-icon-wrap {
+        width: 32px;
+        height: 32px;
+        margin-right: 8px;
+        border-radius: 8px;
+      }
+      .dict-search-icon-wrap svg {
+        width: 15px;
+        height: 15px;
+      }
+      .dict-input {
+        height: 42px;
+        font-size: 14px;
+      }
+      .dict-search-badge {
+        padding: 5px;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        justify-content: center;
+      }
+      .dict-search-badge span:last-child {
+        display: none;
+      }
+
+      /* Popüler Arama Çipleri: Yatay Kaydırılabilir Şerit (Horizontal Swipe) */
+      .dict-quick-tags {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 4px 2px 2px;
+        gap: 6px;
+      }
+      .dict-quick-tags::-webkit-scrollbar { display: none; }
+      .dict-quick-label {
+        flex-shrink: 0;
+        font-size: 10.5px;
+      }
+      .dict-quick-chip {
+        flex-shrink: 0;
+        white-space: nowrap;
+        font-size: 11.5px;
+        padding: 4px 10px;
+        border-radius: 12px;
+      }
+
+      /* Kategori Butonları: Yatay Kaydırılabilir Modern Şerit (Horizontal Pill Tabs) */
+      .dict-categories {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 8px;
+        padding: 4px 2px 10px;
+        margin-bottom: 14px;
+        scroll-snap-type: x proximity;
+      }
+      .dict-categories::-webkit-scrollbar { display: none; }
+      .dict-cat-btn {
+        flex-shrink: 0;
+        white-space: nowrap;
+        padding: 7px 13px;
+        font-size: 12px;
+        border-radius: 20px;
+        scroll-snap-align: start;
+      }
+      .dict-cat-count {
+        font-size: 10.5px;
+        padding: 1px 6px;
+      }
+
+      /* Alfabe İndeks Çubuğu: Yatay Kaydırılabilir A-Z Şeridi */
+      .dict-alphabet-bar {
+        padding-top: 14px;
+        gap: 8px;
+      }
+      .dict-alphabet-header {
+        font-size: 11px;
+      }
+      .dict-alphabet-letters {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 5px;
+        padding: 2px 2px 6px;
+        scroll-snap-type: x proximity;
+      }
+      .dict-alphabet-letters::-webkit-scrollbar { display: none; }
+      .dict-letter-btn {
+        flex-shrink: 0;
+        min-width: 32px;
+        height: 32px;
+        font-size: 12px;
+        border-radius: 8px;
+        padding: 0;
+        scroll-snap-align: start;
+      }
+      .dict-letter-btn[data-letter="ALL"] {
+        min-width: 50px;
+        padding: 0 10px;
+      }
+
+      /* Terim Kartları Izgarası & Detayları */
+      .dict-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .dict-card {
+        padding: 18px 16px;
+        border-radius: 16px;
+      }
+      .dict-usta-name {
+        font-size: 18px;
+      }
+      .dict-official-box {
+        padding: 10px 12px;
+        font-size: 12.5px;
+      }
+      .dict-desc {
+        font-size: 12.5px;
+        line-height: 1.55;
+      }
+      .dict-example-box {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+
+      /* İlerleme ve Daha Fazla Butonları */
+      .dict-load-more-wrap {
+        padding: 20px 16px;
+        border-radius: 16px;
+        margin-top: 30px;
+      }
+      .dict-load-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+      }
+      .dict-load-more-btn, .dict-load-all-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 13.5px;
+      }
+
+      /* Banner CTA */
+      .dict-banner-cta {
+        flex-direction: column;
+        text-align: center;
+        padding: 26px 18px;
+        border-radius: 18px;
+        margin-top: 40px;
+      }
+      .dict-banner-cta h3 { font-size: 19px; }
+      .dict-banner-cta p { font-size: 13px; }
+      .dict-banner-cta .cta-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+      }
+      .dict-banner-cta .dict-btn-white, .dict-banner-cta .btn {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
     }
   </style>
 
